@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/study-material-extraction/batch-manifest.schema.json",
+  "title": "Study Material Extraction Batch Manifest",
+  "type": "object",
+  "required": ["schema_version", "root", "runs"],
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "root": { "type": "string", "minLength": 1 },
+    "runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["run_slug", "source_pdf", "workspace", "stage"],
+        "properties": {
+          "run_slug": { "type": "string" },
+          "source_pdf": { "type": "string" },
+          "workspace": { "type": "string" },
+          "stage": {
+            "type": "string",
+            "enum": ["discovered", "rendered", "cropped", "ocr_draft", "review_ready", "markdown_draft", "preview_built", "accepted", "blocked", "failed"]
+          },
+          "last_successful_stage": { "type": "string" },
+          "blocked_reason": { "type": ["string", "null"] },
+          "error_summary": { "type": ["string", "null"] },
+          "preview_status": { "type": "string" },
+          "preview_files": { "type": "array" },
+          "notes": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
+

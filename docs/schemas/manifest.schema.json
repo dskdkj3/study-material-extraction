@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/study-material-extraction/manifest.schema.json",
+  "title": "Study Material Extraction Run Manifest",
+  "type": "object",
+  "required": ["schema_version", "run_slug", "source_pdf", "workspace", "stage", "problems"],
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "run_slug": { "type": "string", "minLength": 1 },
+    "source_pdf": { "type": "string", "minLength": 1 },
+    "workspace": { "type": "string", "minLength": 1 },
+    "stage": {
+      "type": "string",
+      "enum": ["discovered", "rendered", "cropped", "ocr_draft", "review_ready", "markdown_draft", "preview_built", "accepted", "blocked", "failed"]
+    },
+    "question_only_status": { "type": "string" },
+    "answer_status": { "type": "string" },
+    "guided_solution_status": { "type": "string" },
+    "guided_solution_file": { "type": "string" },
+    "alternate_method_status": { "type": "string" },
+    "alternate_method_file": { "type": "string" },
+    "alternate_method_max_rounds": { "type": "integer", "minimum": 1 },
+    "alternate_method_context_policy": { "type": "string" },
+    "rejected_method_status": { "type": "string" },
+    "rejected_method_file": { "type": "string" },
+    "rejected_methods": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "teaching_status": { "type": "string" },
+    "correction_log_status": { "type": "string" },
+    "correction_log_file": { "type": "string" },
+    "source_reference_used_for_answers": { "type": "boolean" },
+    "answer_reference_check_status": { "type": "string" },
+    "source_corrections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "problem_number", "status", "category", "source_claim", "correction", "evidence"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "problem_number": { "type": "integer", "minimum": 1 },
+          "status": { "type": "string" },
+          "category": { "type": "string" },
+          "source_pages": { "type": "array", "items": { "type": "integer", "minimum": 1 } },
+          "source_crops": { "type": "array", "items": { "type": "string" } },
+          "source_claim": { "type": "string", "minLength": 1 },
+          "correction": { "type": "string", "minLength": 1 },
+          "evidence": { "type": "string", "minLength": 1 },
+          "reviewer": { "type": "string" },
+          "publication_note": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "preview_status": { "type": "string" },
+    "preview_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "path", "status"],
+        "properties": {
+          "kind": { "type": "string" },
+          "path": { "type": "string" },
+          "html_path": { "type": "string" },
+          "generated_markdown": { "type": "string" },
+          "pages": { "type": "integer", "minimum": 1 },
+          "sha256": { "type": "string" },
+          "status": { "type": "string" },
+          "source_file": { "type": "string" },
+          "source_files": { "type": "array", "items": { "type": "string" } },
+          "print_transformations": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "problems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "number", "question_status"],
+        "properties": {
+          "id": { "type": "string" },
+          "number": { "type": "integer", "minimum": 1 },
+          "source_pages": { "type": "array", "items": { "type": "integer", "minimum": 1 } },
+          "question_status": { "type": "string" },
+          "source_explanation_status": { "type": "string" },
+          "guided_solution_status": { "type": "string" },
+          "alternate_method_status": { "type": "string" },
+          "alternate_method_rounds_completed": { "type": "integer", "minimum": 0 },
+          "alternate_method_next_round": { "type": "integer", "minimum": 1 },
+          "rejected_methods": { "type": "array", "items": { "type": "string" } },
+          "teaching_status": { "type": "string" },
+          "answer_candidates": { "type": "array", "items": { "type": "string" } },
+          "content_crops": { "type": "array", "items": { "type": "string" } },
+          "review_notes": { "type": "array", "items": { "type": "string" } },
+          "source_corrections": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

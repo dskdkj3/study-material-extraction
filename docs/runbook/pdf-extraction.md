@@ -1,0 +1,243 @@
+# PDF Extraction Runbook
+
+This runbook turns one scanned PDF into clean study-material Markdown and generated previews. It is written to support both one-off runs and later batch processing.
+
+## Scope
+
+The default goal is to preserve effective content:
+
+- problems;
+- source explanations, when present;
+- required figures, tables, plots, and formula layout;
+- independent reference answers, when requested;
+- guided step-by-step solutions for formal material sets, including selected alternate-method walkthroughs when useful;
+- alternate-method discovery records, when reference answers are authored;
+- rejected but reusable method records, when a candidate is worth preserving but not suitable for the reference answer;
+- flexible teaching notes for transfer, extension, and method comparison, when useful;
+- documented corrections to source typos or wrong source answers, when found.
+
+The default goal excludes watermarks, page numbers, advertisements, empty answer boxes, personal-information fields, warning banners, and platform contact text.
+
+## Workspace
+
+Use one run workspace per source file:
+
+```text
+/srv/xsy-agent-share/pdf-extraction/<run-slug>/
+  source.md
+  questions.md
+  answers.md
+  guided-solutions.md
+  alternate-method-discovery.md
+  rejected-methods.md
+  teaching.md
+  corrections.md
+  manifest.json
+  pages/
+  content-crops/
+  ocr/
+  assets/
+  preview/
+```
+
+Use a batch manifest at the parent directory:
+
+```text
+/srv/xsy-agent-share/pdf-extraction/batch-manifest.json
+```
+
+Do not put PDFs, page renders, OCR dumps, generated previews, or crops into this repository.
+
+## Automation Boundary
+
+The current automation target is agent-driven repeatability, not a one-click machine pipeline.
+
+Expected use:
+
+1. A human opens an Agent session.
+2. The Agent follows this runbook and repository standards.
+3. The Agent writes manifests, Markdown drafts, previews, and review notes into the run workspace.
+4. The human reviews the explicit review points.
+5. The Agent incorporates review decisions and advances the run stage.
+
+It is acceptable for cropping, OCR lane choice, uncertainty review, answer authoring, and preview inspection to remain interactive. Do not treat missing end-to-end CLI automation as a workflow failure.
+
+## Stage Machine
+
+Use these fixed run stages:
+
+| Stage | Meaning | Next normal step |
+| --- | --- | --- |
+| `discovered` | Source PDF is registered | Render pages |
+| `rendered` | Pages are rendered to images | Crop content blocks |
+| `cropped` | Content blocks are cropped and indexed | Run OCR / vision lanes |
+| `ocr_draft` | OCR or vision drafts exist | Human/agent review |
+| `review_ready` | Review sheet exists with uncertainties | Write canonical Markdown |
+| `markdown_draft` | Canonical Markdown such as `source.md`, `questions.md`, `answers.md`, or `guided-solutions.md` exists | Build preview |
+| `preview_built` | Preview artifacts exist and are logged | Accept or revise |
+| `accepted` | Current extraction is accepted for use | Archive or batch next |
+
+Use `blocked` for missing decisions or materials. Use `failed` for execution failures. Do not use batch `stage` as a substitute for per-problem review status.
+
+## Procedure
+
+1. Register the PDF in `batch-manifest.json` and create `<run-slug>/manifest.json`.
+2. Validate manifest shape whenever a manifest is created or materially changed:
+
+   ```sh
+   node scripts/validate-manifests.mjs /srv/xsy-agent-share/pdf-extraction/batch-manifest.json /srv/xsy-agent-share/pdf-extraction/<run-slug>
+   ```
+
+3. Inspect the PDF:
+
+   ```sh
+   pdfinfo source.pdf
+   pdftotext -f 1 -l 2 -layout source.pdf -
+   pdfimages -list source.pdf
+   ```
+
+4. Render pages at a stable DPI:
+
+   ```sh
+   pdftoppm -png -r 220 source.pdf pages/page
+   ```
+
+5. Crop effective-content blocks into `content-crops/` and record page/bbox metadata in `manifest.json`.
+6. Run OCR and vision lanes according to the approved lane policy. Store lane outputs under `ocr/`.
+7. Create `ocr-review.md` or an equivalent review sheet listing uncertainties and cross-lane differences.
+8. Write canonical Markdown:
+
+   - `source.md`: source problems plus source explanations;
+   - `questions.md`: reviewed question-only edition;
+   - `answers.md`: independent reference answers, often with multiple useful methods, if requested;
+   - `guided-solutions.md`: step-by-step detailed solutions; this is the default formal detailed product once answers are stable, and should include selected alternate-method walkthroughs when useful;
+   - `alternate-method-discovery.md`: alternate-method rounds, candidates, verification notes, adoption decisions, and stop reasons, if answers are authored;
+   - `rejected-methods.md`: reusable but rejected methods, such as clearly out-of-scope routes or methods that are too hard to learn quickly;
+   - `teaching.md`: transfer, extension, method comparison, and problem-family notes, if useful;
+   - `corrections.md`: confirmed or candidate corrections to source typos, wrong source answers, and source-solution defects.
+
+9. After the independent `answers.md` draft, run the alternate-method discovery rounds defined in [Answer Authoring Standard](../standards/answer-authoring.md). The default cap is ten rounds per problem: when a useful method is accepted, update `answers.md` and try another round; when a round finds no useful candidate, stop early for that problem. Prefer one isolated critic/subagent context per problem, batched by the active concurrency limit. Record each round in `alternate-method-discovery.md`, including per-problem context boundary, candidates, verification, adoption decisions, and stop reasons. Add only verified, useful methods to `answers.md`.
+
+   If a rejected candidate is still worth remembering, also add it to `rejected-methods.md`. This is for routes that are mathematically coherent and genuinely different, but not suitable for the reference answer because they are significantly out of scope, hard to learn quickly, too error-prone, or mainly useful as author-side review evidence.
+
+10. During reference checking, update `corrections.md` whenever the source explanation has a material typo or wrong mathematical claim. Keep the original transcription in `source.md`; do not silently rewrite source errors away.
+
+11. Generate or update `guided-solutions.md` after reference answers and alternate-method decisions are stable enough to explain step by step. This is a default output for a formal material set, not an optional experiment. It always expands one recommended path per problem, and every method accepted into `answers.md` should be considered for selected alternate-method expansion. Methods not expanded should have a short reason when the omission may surprise readers.
+
+    The Agent owns this guided-solution expansion pass by default. For each method accepted into `answers.md`, record one decision in `guided-solutions.md` or `manifest.json`:
+
+    - `mainline_expanded`: the method is the main walkthrough.
+    - `alternate_expanded`: the method is expanded as a selected alternate walkthrough.
+    - `reference_only`: the method remains concise in `answers.md`; record why it is not expanded when useful.
+
+    Prefer expanding alternates that are short, safer, easier to master quickly, or give a transferable idea. Keep routine variants, long overkill routes, and methods with little learning gain as `reference_only`.
+
+12. Generate or update `teaching.md` when there is useful transfer value: related problem families, method comparison, short prerequisite refreshers, common traps, or variants. Do not force a teaching note for every problem.
+
+13. Generate preview Markdown:
+
+   ```sh
+   node scripts/build-preview-markdown.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
+   ```
+
+14. Generate PDF previews using [Preview PDF Standard](../standards/preview-pdf.md).
+15. Spot-check rendered pages visually and update `manifest.json` with preview paths, page counts, hashes, and caveats.
+16. Re-run manifest validation.
+17. Mark the run `accepted` only after the intended content surface has been reviewed. A good preview does not imply mathematical correctness.
+
+## Distribution Handoff
+
+After a run is accepted, prepare a separate public distribution repository according to [Distribution Repository Standard](../standards/distribution-repository.md).
+
+Recommended handoff:
+
+1. Choose a public material path such as `materials/gaoshu1-ii/2023-06-final/`.
+2. Copy only reader-facing Markdown:
+   - `questions.md`
+   - `answers.md`
+   - `guided-solutions.md`
+   - `teaching.md`, if useful
+   - `corrections.md`, if useful
+   - a public-safe `manifest.json`
+3. Remove local absolute paths such as `/srv/xsy-agent-share/...`.
+4. Keep raw PDF, crop images, page renders, OCR lane dumps, and temporary logs out of the distribution repository by default.
+5. Attach generated PDFs to a GitHub Release, or document any intentional exception in the material README.
+6. Make the material README human-readable: tell readers what to open, where PDFs are, and what corrections are known.
+
+## Run Completion Checklist
+
+Before starting the next PDF, the current run should have an explicit answer for each item:
+
+- effective content extracted, with watermarks and page furniture removed;
+- `questions.md` reviewed against source images or an explicit review limitation recorded;
+- `answers.md` authored independently and status marked honestly;
+- alternate-method discovery completed or deliberately skipped with a reason;
+- every accepted answer method considered for `guided-solutions.md` expansion;
+- `guided-solutions.md` includes a main walkthrough and selected alternate walkthroughs or a clear reference-only list;
+- `teaching.md` contains transfer, method comparison, or common-mistake notes rather than duplicating the full guided solution;
+- `corrections.md` records confirmed or candidate source defects;
+- preview Markdown and PDF artifacts regenerated after content changes;
+- generated PDFs have page counts, hashes, renderer notes, and spot-check status in `manifest.json`;
+- public distribution copy has no local absolute paths, raw OCR/crop references, private notes, or broken release links;
+- release assets are uploaded, or `pending_upload` plus `/srv/xsy-agent-share/.../UPLOAD.md` exists;
+- final material status does not overclaim mathematical certification.
+
+## OCR Lane Policy
+
+The default lanes are:
+
+| Lane | Role | Trust boundary |
+| --- | --- | --- |
+| `tesseract` | offline baseline and layout hint | Do not trust dense math formulas |
+| `gpt-5.5` vision | formula/text draft from crops | Use cropped images with `detail: "original"`; still review manually |
+| local/Hugging Face model | bake-off candidate | Use only after a sample comparison and explicit adoption |
+
+Use bake-off samples before adopting a new lane. Score `text`, `math`, `layout`, `uncertainty`, and `noise` as `0/1/2`; assign lane roles instead of picking a single absolute winner.
+
+## Review Rules
+
+- Reviewed question text can feed `questions.md` and independent answers.
+- Source explanations remain untrusted until separately checked.
+- Formula-heavy content must be checked against source crops, not only OCR output.
+- Every problem should keep source pages and crop references in `manifest.json`.
+- Every preview artifact should be reproducible from Markdown plus scripts/templates.
+- Guided solutions are not a substitute for reference answers: they are the detailed learning version of the answer surface, while `answers.md` may remain the broader multi-method reference.
+- Teaching explanations are not a substitute for guided solutions: they are a separate transfer surface and may intentionally include prerequisite review, related problem families, method comparison, and common mistakes.
+
+## Mathematical Assurance Boundary
+
+If the human reviewer cannot audit mathematical correctness, do not mark answers or guided solutions as mathematically certified.
+
+Use explicit statuses instead:
+
+- `questions.md`: may be `reviewed` after source-image/text review.
+- `answers.md`: use `agent_checked_draft`, `reference_checked_draft`, or `published_draft` until a qualified reviewer audits it.
+- `guided-solutions.md`: use `agent_checked_draft` or `draft_with_unexpanded_reference_methods` until reviewed.
+- `teaching.md`: use `split_transfer_draft` or `agent_checked_draft`.
+
+Agent-side checks can raise confidence but do not equal human certification. A stronger Agent check should include independent recomputation, comparison with source/reference material as non-authoritative evidence, endpoint/sign/domain/convergence checks, and a consistency pass between `questions.md`, `answers.md`, `guided-solutions.md`, and `corrections.md`.
+
+Public materials may still be released as drafts if the README and `manifest.json` state this clearly.
+
+## Correction Log Policy
+
+Use `corrections.md` for source-material defects that are useful to remember later:
+
+- source answer typos;
+- wrong source final results;
+- wrong or missing endpoint, sign, constant, orientation, convergence, or domain conditions;
+- source-solution steps that conflict with the problem statement or with the source's own derivation.
+
+Do not use `corrections.md` for ordinary OCR uncertainty. OCR uncertainty belongs in `source.md` notes, crop notes, or `manifest.json` review notes until the source image is checked.
+
+Each correction item should include:
+
+- a stable correction id, such as `q003-c001`;
+- problem number and source page/crop;
+- defect category, status, and reviewer;
+- the source claim as transcribed;
+- the corrected claim used by `answers.md`;
+- the evidence or theorem supporting the correction;
+- a short publication note that can later explain how this edition improves on the source.
+
+Record the same correction id in `manifest.json` under the problem and in the run-level `source_corrections` list. Keep the source transcription visible so the correction is auditable.

@@ -1,0 +1,10 @@
+{
+  "name": "study-material-extraction",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build-preview-markdown": "node scripts/build-preview-markdown.mjs",
+    "validate-manifests": "node scripts/validate-manifests.mjs",
+    "check-json": "node -e \"JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'))\""
+  }
+}

@@ -1,0 +1,127 @@
+# Preview PDF Standard
+
+PDF previews are generated artifacts for reading and review. They are not canonical content.
+
+## Preview Types
+
+Default previews:
+
+- `questions-preview.pdf`: clean question-only edition.
+- `answers-preview.pdf`: combined question plus multi-method reference-answer draft.
+- `guided-solutions-preview.pdf`: combined question plus step-by-step guided solutions, including selected alternate-method walkthroughs when useful.
+- `teaching-preview.pdf`: combined question plus transfer and extension notes, when `teaching.md` exists.
+- `corrections-preview.pdf`: source-correction record, when `corrections.md` exists and a release/review artifact is useful.
+
+Do not generate an answer PDF that contains only answers for human review by default. Readers need the question context.
+
+Do not merge guided solutions or teaching explanations into `answers-preview.pdf`. Multi-method reference answers, guided solutions, and transfer notes optimize for different reading modes.
+
+Do not merge source-correction records into `answers-preview.pdf` or `guided-solutions-preview.pdf` by default. Corrections support quality review and publication notes; they are not part of the ordinary study flow.
+
+## Heading Rules
+
+Question-only preview:
+
+```md
+## 1. 求三重积分 $I=\iiint_\Omega ...$
+```
+
+Combined answer or guided-solution preview:
+
+```md
+## 1. 求三重积分 $I=\iiint_\Omega ...$
+
+### 解法 A：球对称性
+```
+
+Avoid meaningless headings such as `1. 题目` or `1. 题目与答案` in rendered previews. The problem heading should carry the problem itself, or a concise problem summary when the full prompt is too long.
+
+If there is only one answer method, omit `解法 A` and use a descriptive method heading:
+
+```md
+### 按区域直接积分
+```
+
+## Typography
+
+Default goals:
+
+- A4 page.
+- Margins around `16-22mm`.
+- Chinese serif body font and sans-serif headings.
+- MathJax or equivalent high-quality math rendering.
+- Display formulas for long formulas.
+- No browser headers, footers, local file paths, or timestamps.
+- Subtle semantic color only: use color to separate problem prompts, notes, and table headers; do not make the page feel like a slide deck.
+- Avoid repeated labels such as `答案` under every problem when the surrounding preview already establishes that it is a solution document.
+
+## Design References
+
+Use these references as guidance, not as rigid templates:
+
+- MDN `@page`: printed pages need explicit page size, margins, and print-specific layout rules.
+- WCAG contrast guidance: accent colors must not reduce text readability.
+- Butterick's Practical Typography: line spacing and hierarchy should serve reading, not decoration.
+- The Linux.do typography terminology post: useful vocabulary for discussing typography with agents, especially type classification, spacing, hierarchy, and density.
+
+For this workflow, prefer a restrained handout style: serif body text, sans-serif headings, thin rules, a single accent color, and light note blocks. Avoid decorative cards, heavy backgrounds, or dense color systems in math-heavy PDFs.
+
+## Recommended Current Renderer
+
+The current robust path for Markdown with LaTeX math is:
+
+1. Generate preview Markdown with:
+
+   ```sh
+   node scripts/build-preview-markdown.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
+   ```
+
+2. Generate HTML with Pandoc and MathJax:
+
+   ```sh
+   pandoc preview/answers-preview.md \
+     --standalone \
+     --from markdown+tex_math_dollars+tex_math_single_backslash \
+     --to html5 \
+     --mathjax=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js \
+     --css=print.css \
+     --metadata title= \
+     --metadata pagetitle="多解法参考答案草稿" \
+     -o preview/answers-preview.html
+   ```
+
+   Use the same command shape for `guided-solutions-preview.md`, `teaching-preview.md`, `questions-preview.md`, and `corrections-preview.md`, changing the input file, output file, and `pagetitle`.
+
+3. Print with a headless Chromium-family browser:
+
+   ```sh
+   chromium \
+     --headless \
+     --disable-gpu \
+     --no-sandbox \
+     --allow-file-access-from-files \
+     --run-all-compositor-stages-before-draw \
+     --virtual-time-budget=15000 \
+     --no-pdf-header-footer \
+     --print-to-pdf=preview/answers-preview.pdf \
+     "file://$(pwd)/preview/answers-preview.html"
+   ```
+
+On `x1c9`, Brave is an already-available Chromium-family browser and has been verified for this workflow. If `chromium` is not on `PATH`, locate Brave with:
+
+```sh
+nix eval --raw nixpkgs#brave.outPath
+```
+
+Then use `<brave-out-path>/bin/brave` with the same headless print flags above. Headless Brave may print DBus or authorization warnings on stderr in the Agent environment; if the PDF is written and visual checks pass, treat those warnings as renderer noise and record them as a caveat rather than a failure.
+
+TeX-based rendering is acceptable when the required CJK/LaTeX stack is already available. Do not pull a huge TeX closure merely to check a draft if the HTML+MathJax route works.
+
+## Validation
+
+For every generated PDF:
+
+- run `pdfinfo` and record page count;
+- visually inspect the first page and any likely overflow page;
+- check that math is rendered, not printed as raw LaTeX;
+- update `manifest.json` with preview path, pages, sha256, renderer, and caveats.
