@@ -117,7 +117,16 @@ Recommended release assets:
 
 Keep release asset filenames ASCII-safe for GitHub upload. Put Chinese document labels in the material README and release notes.
 
+An optional ZIP bundle may be published for readers who want to download the full PDF set at once. The ZIP should contain the same published PDFs plus `SHA256SUMS.txt`; keep the individual PDF assets and checksums as the canonical record. A human-facing ZIP filename may include Chinese labels or attribution when useful, but do not rely on that filename as structured metadata.
+
 It is acceptable to commit small PDFs temporarily only when a material README explicitly says the repository is intentionally carrying those generated files. Do not let this become the default.
+
+After the GitHub Release is published, update the material README and public `manifest.json`:
+
+- mark the release as `published`;
+- add the release page URL;
+- add direct download URLs for every PDF and checksum asset;
+- keep draft or review status visible for answers and guided solutions if they are not mathematically certified.
 
 ## GitHub Release Permission
 

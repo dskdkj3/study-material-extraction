@@ -171,7 +171,9 @@ Recommended handoff:
 4. Remove local absolute paths such as `/srv/xsy-agent-share/...`.
 5. Keep raw PDF, crop images, page renders, OCR lane dumps, and temporary logs out of the distribution repository by default.
 6. Attach generated PDFs to a GitHub Release with ASCII-safe asset filenames. GitHub can rewrite non-ASCII asset names and create duplicate filename collisions; keep Chinese document names in README/release notes.
-7. Make the material README human-readable: tell readers what to open, where PDFs are, and what corrections are known.
+7. Optionally provide a convenience ZIP containing the published PDFs and `SHA256SUMS.txt`. Treat the ZIP as a convenience package, not the canonical record; keep each PDF listed separately in README and `manifest.json`. If the ZIP filename carries a human-facing attribution or label, make sure it is only a filename label and does not replace the material metadata.
+8. After the release is published, update the material README and `manifest.json` from `pending_upload` to `published`, add the release page URL, add direct download URLs for every published asset, and re-check that no broken or local-only links remain.
+9. Make the material README human-readable: tell readers what to open, where PDFs are, and what corrections are known.
 
 ## Run Completion Checklist
 
@@ -192,7 +194,8 @@ Before starting the next PDF, the current run should have an explicit answer for
 - release PDFs have passed metadata audit; if metadata was cleaned, text extraction and visual screenshots were revalidated after cleaning;
 - public distribution copy has no local absolute paths, raw OCR/crop references, private notes, or broken release links;
 - public Markdown filenames are Chinese-reader-facing; GitHub Release PDF asset filenames are ASCII-safe; machine files such as `manifest.json` remain stable;
-- release assets are uploaded, or `pending_upload` plus `/srv/xsy-agent-share/.../UPLOAD.md` exists;
+- release assets are uploaded and public README/manifest contain live links, or `pending_upload` plus `/srv/xsy-agent-share/.../UPLOAD.md` exists;
+- any optional ZIP bundle is clearly treated as a convenience package and has its own checksum if it will be published;
 - final material status does not overclaim mathematical certification.
 
 ## OCR Lane Policy
