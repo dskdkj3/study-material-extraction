@@ -262,7 +262,11 @@ function writePreviewFiles() {
   fs.writeFileSync(path.join(previewDir, "questions-preview.md"), questionOut.join("\n"));
 
   if (answersMd) {
-    const sourceReferenceUsed = answerFrontmatter.source_reference_used === true || answerFrontmatter.source_reference_used === "true";
+    const sourceReferenceUsed =
+      answerFrontmatter.source_reference_used === true ||
+      answerFrontmatter.source_reference_used === "true" ||
+      answerFrontmatter.source_reference_used_for_answers === true ||
+      answerFrontmatter.source_reference_used_for_answers === "true";
     const answerIntro = sourceReferenceUsed
       ? "> 状态：Agent 独立解题后做过 reference-check；`source.md` 来源解析仅作参考，不视为权威答案。"
       : "> 状态：Agent 独立解题版；题干来自已复核的 `questions.md`，答案未参考 `source.md` 中的来源解析。";

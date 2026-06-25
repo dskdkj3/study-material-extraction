@@ -153,7 +153,14 @@ Use `blocked` for missing decisions or materials. Use `failed` for execution fai
    node scripts/build-preview-markdown.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
    ```
 
-15. Generate PDF previews using [Preview PDF Standard](../standards/preview-pdf.md).
+15. Generate PDF previews using [Preview PDF Standard](../standards/preview-pdf.md). If using the Pandoc + `xelatex` fallback, first build PDF-specific Markdown:
+
+   ```sh
+   node scripts/build-pdf-markdown.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
+   ```
+
+   Record the actual renderer in `manifest.json`, especially when the fallback was used because headless Brave/Chromium stalled.
+
 16. Spot-check rendered pages visually and update `manifest.json` with preview paths, page counts, hashes, and caveats.
 17. Re-run manifest validation.
 18. Mark the run `accepted` only after the intended content surface has been reviewed. A good preview does not imply mathematical correctness.

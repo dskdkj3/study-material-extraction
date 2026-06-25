@@ -131,6 +131,33 @@ nix eval --raw nixpkgs#brave.outPath
 
 Then use `<brave-out-path>/bin/brave` with the same headless print flags above. Headless Brave may print DBus or authorization warnings on stderr in the Agent environment; if the PDF is written and visual checks pass, treat those warnings as renderer noise and record them as a caveat rather than a failure.
 
+### LaTeX Fallback
+
+If headless Brave/Chromium stalls or cannot print in the current Agent environment, use the Pandoc + `xelatex` fallback instead of blocking the run. This has been verified for CJK text and LaTeX math when `ctexart` is installed.
+
+First normalize preview Markdown for Pandoc's LaTeX reader:
+
+```sh
+node scripts/build-pdf-markdown.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
+```
+
+Then render each PDF from `preview/pdf-md/`:
+
+```sh
+pandoc preview/pdf-md/answers-preview.md \
+  --from markdown+tex_math_dollars+tex_math_single_backslash \
+  --pdf-engine=xelatex \
+  -V documentclass=ctexart \
+  -V geometry:margin=18mm \
+  -V colorlinks=false \
+  --metadata title= \
+  -o preview/answers-preview.pdf
+```
+
+Use the same command shape for the other preview files. Record the renderer as `pandoc + xelatex/ctexart` in `manifest.json`.
+
+The normalization step is needed because preview Markdown may contain display math or option labels in a shape that browser Markdown tolerates but Pandoc LaTeX parses differently. It removes blank lines inside `$$ ... $$` blocks and renders bare `A.` / `B.` / `C.` / `D.` option labels as ordinary text, not ordered-list markers.
+
 TeX-based rendering is acceptable when the required CJK/LaTeX stack is already available. Do not pull a huge TeX closure merely to check a draft if the HTML+MathJax route works.
 
 ## Validation

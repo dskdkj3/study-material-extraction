@@ -73,7 +73,7 @@ Keep machine-oriented files such as `manifest.json` in stable ASCII names.
 ## Source Markdown Pattern
 
 ```md
-## 1. 题目
+## 1. 二重积分区域计算
 
 > 状态：reviewed；source_pages: [1]
 
@@ -89,12 +89,14 @@ Keep machine-oriented files such as `manifest.json` in stable ASCII names.
 ## Question Markdown Pattern
 
 ```md
-## 1. 题目
+## 1. 二重积分区域计算
 
 > 状态：reviewed；source_pages: [1]
 
 求 $\iint_D y\,dx\,dy$，其中 $D$ 由 $y=0$ 以及 $y=\sin x$ 所围。
 ```
+
+Problem headings should be concise summaries of the task, not generic labels such as `题目` or `题目与答案`. Good headings help readers scan the PDF and prevent preview renderers from trying to promote a long formula block into the section title. Keep the full original prompt in the body below the heading.
 
 ## Answer Markdown Pattern
 
