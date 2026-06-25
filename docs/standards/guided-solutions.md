@@ -65,9 +65,9 @@ Use this default structure, omitting sections only when they would be empty:
 
 当备用解法值得学习时，按较短粒度展开关键想法和关键步骤。
 
-### 本题未展开的参考解法
+### 可选：备用解法去向
 
-简要说明 `answers.md` 中哪些解法只保留为参考答案，以及为什么不在详解版展开。
+只有当读者会自然困惑“为什么参考答案里有这个方法，详解版却不讲”时才写。否则把 `reference_only` 原因记录在方法决策记录或 manifest/review note 中，不要在读者 PDF 里每题机械列一段。
 ```
 
 For selected alternate methods, use descriptive method headings:
@@ -100,7 +100,7 @@ For every method accepted into `answers.md`, make one of these decisions:
 - `alternate_expanded`: this is a selected alternate walkthrough.
 - `reference_only`: keep it concise in `answers.md`; do not expand it in `guided-solutions.md`.
 
-When a method is `reference_only`, record the reason briefly when the omission may surprise readers. Typical reasons are: same core idea as the mainline method, too much algebra for little learning gain, useful as a check but not as a learning route, or better handled in `teaching.md` as a comparison note.
+When a method is `reference_only`, record the reason briefly when the omission may surprise readers. Typical reasons are: same core idea as the mainline method, too much algebra for little learning gain, useful as a check but not as a learning route, or better handled in `teaching.md` as a comparison note. Prefer keeping routine `reference_only` bookkeeping out of the reader-facing guided PDF.
 
 If a method is rejected because it is too advanced, too long, too fragile, or outside the target course's short-term learnability, record it in `rejected-methods.md` instead of deleting the reasoning trail.
 

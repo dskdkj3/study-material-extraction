@@ -159,18 +159,19 @@ After a run is accepted, prepare a separate public distribution repository accor
 
 Recommended handoff:
 
-1. Choose a public material path such as `materials/gaoshu1-ii/2023-06-final/`.
-2. Copy only reader-facing Markdown:
-   - `questions.md`
-   - `answers.md`
-   - `guided-solutions.md`
-   - `teaching.md`, if useful
-   - `corrections.md`, if useful
+1. Choose a public material path such as `materials/gaoshu1-ii/2024-06-final/`.
+2. Copy only reader-facing Markdown, using Chinese public filenames:
+   - `questions.md` -> `01-仅题目.md`
+   - `answers.md` -> `02-多解法参考答案.md`
+   - `guided-solutions.md` -> `03-详解.md`
+   - `teaching.md` -> `04-拓展讲解.md`, if useful
+   - `corrections.md` -> `05-纠错清单.md`, if useful
    - a public-safe `manifest.json`
-3. Remove local absolute paths such as `/srv/xsy-agent-share/...`.
-4. Keep raw PDF, crop images, page renders, OCR lane dumps, and temporary logs out of the distribution repository by default.
-5. Attach generated PDFs to a GitHub Release, or document any intentional exception in the material README.
-6. Make the material README human-readable: tell readers what to open, where PDFs are, and what corrections are known.
+3. Use actual exam month in public naming. If the source says `2023-2024 学年第 2 学期`, the public exam month is normally in 2024, not 2023; state the month assumption in the material README.
+4. Remove local absolute paths such as `/srv/xsy-agent-share/...`.
+5. Keep raw PDF, crop images, page renders, OCR lane dumps, and temporary logs out of the distribution repository by default.
+6. Attach generated PDFs to a GitHub Release with Chinese reader-facing filenames, or document any intentional exception in the material README.
+7. Make the material README human-readable: tell readers what to open, where PDFs are, and what corrections are known.
 
 ## Run Completion Checklist
 
@@ -189,6 +190,7 @@ Before starting the next PDF, the current run should have an explicit answer for
 - preview Markdown and PDF artifacts regenerated after content changes;
 - generated PDFs have page counts, hashes, renderer notes, and spot-check status in `manifest.json`;
 - public distribution copy has no local absolute paths, raw OCR/crop references, private notes, or broken release links;
+- public distribution filenames are Chinese-reader-facing for Markdown/PDF, while machine files such as `manifest.json` remain stable;
 - release assets are uploaded, or `pending_upload` plus `/srv/xsy-agent-share/.../UPLOAD.md` exists;
 - final material status does not overclaim mathematical certification.
 

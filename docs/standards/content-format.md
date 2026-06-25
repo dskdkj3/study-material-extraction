@@ -15,7 +15,7 @@ Each canonical Markdown file starts with YAML frontmatter:
 ```md
 ---
 title: "23 高数一（II）真题期末"
-display_title: "2023-06 高等数学一（II）期末真题"
+display_title: "2024-06 高等数学一（II）期末真题"
 course: "高等数学一（II）"
 term: "2023-2024 学年第 2 学期"
 source_pdf: "/srv/xsy-agent-share/23高数一（II）真题期末_all_pages.pdf"
@@ -40,6 +40,29 @@ Use these canonical editable files:
 - `corrections.md`: source-correction log for confirmed or candidate source typos, wrong answers, and source-solution defects.
 
 Do not duplicate the same body content across these files by hand when a generated preview can combine them.
+
+## Public Filenames
+
+The extraction workspace may keep stable English filenames because scripts and standards depend on them. Public distribution repositories should prefer Chinese reader-facing filenames for Markdown and release assets.
+
+Recommended public Markdown filenames:
+
+- `01-仅题目.md`
+- `02-多解法参考答案.md`
+- `03-详解.md`
+- `04-拓展讲解.md`
+- `05-纠错清单.md`
+- `manifest.json`
+
+Recommended PDF asset filenames:
+
+- `2024-06-高等数学一（II）期末真题-仅题目-v1.0.pdf`
+- `2024-06-高等数学一（II）期末真题-多解法参考答案-v1.0.pdf`
+- `2024-06-高等数学一（II）期末真题-详解-v1.0.pdf`
+- `2024-06-高等数学一（II）期末真题-拓展讲解-v1.0.pdf`
+- `2024-06-高等数学一（II）期末真题-纠错清单-v1.0.pdf`
+
+Keep machine-oriented files such as `manifest.json` in stable ASCII names.
 
 ## Source Markdown Pattern
 
@@ -120,9 +143,9 @@ If there is only one method, do not write `解法 A`; use a descriptive method t
 
 当备用解法值得学习时，展开关键想法和关键步骤。
 
-### 本题未展开的参考解法
+### 可选：备用解法去向
 
-说明 `answers.md` 中哪些解法只保留为参考，以及为什么不在详解版展开。
+只有当读者会疑惑时，说明哪些参考答案解法不在详解版展开以及原因。不要每题机械添加。
 ```
 
 Guided solutions are the default detailed product. They must expand the recommended reference-answer path at a finer step size, and should expand alternate methods from `answers.md` when those methods materially help learning. They do not need to expand every alternate method.
@@ -130,7 +153,7 @@ Guided solutions are the default detailed product. They must expand the recommen
 ## Teaching Markdown Pattern
 
 ```md
-# 2023-06 高等数学一（II）期末真题拓展讲解
+# 2024-06 高等数学一（II）期末真题拓展讲解
 
 ## 专题一：多元积分先看区域、对称性和降维
 

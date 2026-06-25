@@ -36,11 +36,11 @@ materials/
   <course-slug>/
     <yyyy-mm-exam-slug>/
       README.md
-      questions.md
-      answers.md
-      guided-solutions.md
-      teaching.md
-      corrections.md
+      01-仅题目.md
+      02-多解法参考答案.md
+      03-详解.md
+      04-拓展讲解.md
+      05-纠错清单.md
       manifest.json
 ```
 
@@ -49,10 +49,12 @@ Example:
 ```text
 materials/
   gaoshu1-ii/
-    2023-06-final/
+    2024-06-final/
 ```
 
-Use actual exam month when known or reasonably inferable. `2023-06-final` is clearer for public readers than `23-24-term2-final`. If the exact month is uncertain, choose the best known month and state the assumption in the material README.
+Use actual exam month when known or reasonably inferable. `2024-06-final` is clearer for public readers than `23-24-term2-final`. If the source says `2023-2024 学年第 2 学期`, a final exam normally belongs to the 2024 summer exam season, so use `2024-06-final` or `2024-07-final` according to the best available evidence. If the exact month is uncertain, choose the best known month and state the assumption in the material README.
+
+Reader-facing Markdown filenames should prefer Chinese names. Keep `manifest.json` as a stable machine-readable filename. The workflow workspace may still use English filenames such as `questions.md` and `guided-solutions.md`; translate names during distribution handoff.
 
 ## Root README
 
@@ -98,7 +100,7 @@ Use the release tag to carry the material version:
 Example:
 
 ```text
-gaoshu1-ii-2023-06-final-v1.0
+gaoshu1-ii-2024-06-final-v1.0
 ```
 
 Use `v1.0` for the first intended public release. Use `v0.x` only for internal trial releases, private preview packages, or throwaway validation uploads.
@@ -107,11 +109,11 @@ The version number is a publication package version, not a claim of mathematical
 
 Recommended release assets:
 
-- `questions.pdf`
-- `answers.pdf`
-- `guided-solutions.pdf`
-- `teaching.pdf`
-- `corrections.pdf`, when useful
+- `2024-06-高等数学一（II）期末真题-仅题目-v1.0.pdf`
+- `2024-06-高等数学一（II）期末真题-多解法参考答案-v1.0.pdf`
+- `2024-06-高等数学一（II）期末真题-详解-v1.0.pdf`
+- `2024-06-高等数学一（II）期末真题-拓展讲解-v1.0.pdf`
+- `2024-06-高等数学一（II）期末真题-纠错清单-v1.0.pdf`, when useful
 
 It is acceptable to commit small PDFs temporarily only when a material README explicitly says the repository is intentionally carrying those generated files. Do not let this become the default.
 

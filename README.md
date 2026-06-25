@@ -97,16 +97,16 @@ PDF 渲染走 Pandoc + MathJax + Brave/Chromium，具体命令见 [Preview PDF S
 README.md
 materials/
   gaoshu1-ii/
-    2023-06-final/
+    2024-06-final/
       README.md
-      questions.md
-      answers.md
-      guided-solutions.md
-      teaching.md
-      corrections.md
+      01-仅题目.md
+      02-多解法参考答案.md
+      03-详解.md
+      04-拓展讲解.md
+      05-纠错清单.md
       manifest.json
 ```
 
 Markdown 留在 Git 里，PDF 可以作为 GitHub Release assets 发布；README 负责把读者带到“题目版、多解法参考答案、详解版、拓展讲解”的下载或阅读入口。
 
-命名优先使用实际考试月份，例如 `2023-06-final`。这比“23-24 学年第 2 学期”更适合检索和公开分发。
+命名优先使用实际考试月份，例如 `2024-06-final`。如果来源写的是 `2023-2024 学年第 2 学期`，期末公开命名通常应落到 2024 年 6/7 月，而不是 2023 年。公开给读者看的 Markdown 和 PDF 文件名优先用中文，`manifest.json` 这类机器文件保留稳定英文名。

@@ -53,7 +53,7 @@ If there is only one answer method, omit `解法 A` and use a descriptive method
 Use a reader-facing title, preferably from `display_title` in `questions.md` frontmatter. The title should include the exam date slug when it is known or reasonably inferred, for example:
 
 ```yaml
-display_title: "2023-06 高等数学一（II）期末真题"
+display_title: "2024-06 高等数学一（II）期末真题"
 ```
 
 Do not put `草稿` in the PDF title or first-level heading. Draft or review status belongs in frontmatter, the material README, `manifest.json`, or a short status note, not in the visible title.

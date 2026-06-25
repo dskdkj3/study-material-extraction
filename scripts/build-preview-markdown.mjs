@@ -280,7 +280,7 @@ function writePreviewFiles() {
       "",
       `# ${title}详解`,
       "",
-      "> 逐题展开一条推荐路径，并选讲值得学习的备用解法。题干来自已复核的 `questions.md`，完整多解法参考见 `answers.md`。",
+      "> 逐题展开一条推荐路径，并选讲值得学习的备用解法。题目文本已复核；完整多解法参考见同套资料的参考答案版。",
       "",
     ];
 
@@ -302,8 +302,8 @@ function writePreviewFiles() {
     const teachingProblemNumbers = [...teaching.keys()].filter((n) => questions.has(n)).sort((a, b) => a - b);
     const teachingIntro =
       teachingProblemNumbers.length > 0
-        ? "> 面向迁移、方法选择和常见误区的补充讲解；题干来自已复核的 `questions.md`，不重复 `guided-solutions.md` 的每一步详解。未出现的题目表示本版暂不单独拓展。"
-        : "> 面向迁移、方法选择和常见误区的专题讲解；题干来自已复核的 `questions.md`，不重复 `guided-solutions.md` 的每一步详解。";
+        ? "> 面向迁移、方法选择和常见误区的补充讲解；题目文本已复核，不重复详解版的每一步推导。未出现的题目表示本版暂不单独拓展。"
+        : "> 面向迁移、方法选择和常见误区的专题讲解；题目文本已复核，不重复详解版的每一步推导。";
     const teachingOut = [
       "---",
       `title: "${title}拓展讲解"`,

@@ -23,6 +23,6 @@ Observed outcomes:
   - `preview/guided-solutions-preview.pdf`
   - `preview/teaching-preview.pdf`
   - `preview/corrections-preview.pdf`
-- Public distribution draft: `/home/agent/exam-solution-notes/materials/gaoshu1-ii/2023-06-final/`.
+- Public distribution draft: `/home/agent/exam-solution-notes/materials/gaoshu1-ii/2024-06-final/`.
 
 The answer preview combines reviewed questions with independent answers. The canonical answer file remains answer-only to avoid duplicating problem text across editable sources.
