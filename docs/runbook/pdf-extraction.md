@@ -14,6 +14,7 @@ The default goal is to preserve effective content:
 - alternate-method discovery records, when reference answers are authored;
 - rejected but reusable method records, when a candidate is worth preserving but not suitable for the reference answer;
 - flexible teaching notes for transfer, extension, and method comparison, when useful;
+- source variants such as A/B volume differences, alternate printed versions, or source-provided variant problems;
 - documented corrections to source typos or wrong source answers, when found.
 
 The default goal excludes watermarks, page numbers, advertisements, empty answer boxes, personal-information fields, warning banners, and platform contact text.
@@ -31,6 +32,7 @@ Use one run workspace per source file:
   alternate-method-discovery.md
   rejected-methods.md
   teaching.md
+  variants.md
   corrections.md
   manifest.json
   pages/
@@ -114,15 +116,18 @@ Use `blocked` for missing decisions or materials. Use `failed` for execution fai
    - `alternate-method-discovery.md`: alternate-method rounds, candidates, verification notes, adoption decisions, and stop reasons, if answers are authored;
    - `rejected-methods.md`: reusable but rejected methods, such as clearly out-of-scope routes or methods that are too hard to learn quickly;
    - `teaching.md`: transfer, extension, method comparison, and problem-family notes, if useful;
+   - `variants.md`: source-provided variants such as A/B volume differences, with variant question text and answers or solutions when available;
    - `corrections.md`: confirmed or candidate corrections to source typos, wrong source answers, and source-solution defects.
 
-9. After the independent `answers.md` draft, run the alternate-method discovery rounds defined in [Answer Authoring Standard](../standards/answer-authoring.md). The default cap is ten rounds per problem: when a useful method is accepted, update `answers.md` and try another round; when a round finds no useful candidate, stop early for that problem. Prefer one isolated critic/subagent context per problem, batched by the active concurrency limit. Record each round in `alternate-method-discovery.md`, including per-problem context boundary, candidates, verification, adoption decisions, and stop reasons. Add only verified, useful methods to `answers.md`.
+9. When the source contains A/B volume differences, alternate printed versions, or other source-provided variants, first identify the primary public problem set. Keep that primary set in `questions.md` and `answers.md`. Preserve non-primary variants in `variants.md` with both the variant question text and its answer or solution when available. Do not silently drop variants, do not mix variant questions into the primary problem set, and do not record a normal A/B variant as a correction.
+
+10. After the independent `answers.md` draft, run the alternate-method discovery rounds defined in [Answer Authoring Standard](../standards/answer-authoring.md). The default cap is ten rounds per problem: when a useful method is accepted, update `answers.md` and try another round; when a round finds no useful candidate, stop early for that problem. Prefer one isolated critic/subagent context per problem, batched by the active concurrency limit. Record each round in `alternate-method-discovery.md`, including per-problem context boundary, candidates, verification, adoption decisions, and stop reasons. Add only verified, useful methods to `answers.md`.
 
    If a rejected candidate is still worth remembering, also add it to `rejected-methods.md`. This is for routes that are mathematically coherent and genuinely different, but not suitable for the reference answer because they are significantly out of scope, hard to learn quickly, too error-prone, or mainly useful as author-side review evidence.
 
-10. During reference checking, update `corrections.md` whenever the source explanation has a material typo or wrong mathematical claim. Keep the original transcription in `source.md`; do not silently rewrite source errors away.
+11. During reference checking, update `corrections.md` whenever the source explanation has a material typo or wrong mathematical claim. Keep the original transcription in `source.md`; do not silently rewrite source errors away.
 
-11. Generate or update `guided-solutions.md` after reference answers and alternate-method decisions are stable enough to explain step by step. This is a default output for a formal material set, not an optional experiment. It always expands one recommended path per problem, and every method accepted into `answers.md` should be considered for selected alternate-method expansion. Methods not expanded should have a short reason when the omission may surprise readers.
+12. Generate or update `guided-solutions.md` after reference answers and alternate-method decisions are stable enough to explain step by step. This is a default output for a formal material set, not an optional experiment. It always expands one recommended path per problem, and every method accepted into `answers.md` should be considered for selected alternate-method expansion. Methods not expanded should have a short reason when the omission may surprise readers.
 
     The Agent owns this guided-solution expansion pass by default. For each method accepted into `answers.md`, record one decision in `guided-solutions.md` or `manifest.json`:
 
@@ -132,7 +137,7 @@ Use `blocked` for missing decisions or materials. Use `failed` for execution fai
 
     Prefer expanding alternates that are short, safer, easier to master quickly, or give a transferable idea. Keep routine variants, long overkill routes, and methods with little learning gain as `reference_only`.
 
-12. Generate or update `teaching.md` when there is useful transfer value: related problem families, method comparison, short prerequisite refreshers, common traps, or variants. Do not force a teaching note for every problem.
+13. Generate or update `teaching.md` when there is useful transfer value: related problem families, method comparison, short prerequisite refreshers, common traps, or variants. Do not force a teaching note for every problem.
 
     For public material, run divergent read-only review before finalizing `teaching.md`. Prefer a small set of independent perspectives instead of one context that already knows the current draft:
 
@@ -142,16 +147,16 @@ Use `blocked` for missing decisions or materials. Use `failed` for execution fai
 
     The main Agent should edit the final file after these passes. Do not concatenate subagent output directly. If the review materially changes the teaching layer, record the accepted, rejected, and moved ideas in `teaching-review.md`.
 
-13. Generate preview Markdown:
+14. Generate preview Markdown:
 
    ```sh
    node scripts/build-preview-markdown.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
    ```
 
-14. Generate PDF previews using [Preview PDF Standard](../standards/preview-pdf.md).
-15. Spot-check rendered pages visually and update `manifest.json` with preview paths, page counts, hashes, and caveats.
-16. Re-run manifest validation.
-17. Mark the run `accepted` only after the intended content surface has been reviewed. A good preview does not imply mathematical correctness.
+15. Generate PDF previews using [Preview PDF Standard](../standards/preview-pdf.md).
+16. Spot-check rendered pages visually and update `manifest.json` with preview paths, page counts, hashes, and caveats.
+17. Re-run manifest validation.
+18. Mark the run `accepted` only after the intended content surface has been reviewed. A good preview does not imply mathematical correctness.
 
 ## Distribution Handoff
 
@@ -165,7 +170,8 @@ Recommended handoff:
    - `answers.md` -> `02-多解法参考答案.md`
    - `guided-solutions.md` -> `03-详解.md`
    - `teaching.md` -> `04-拓展讲解.md`, if useful
-   - `corrections.md` -> `05-纠错清单.md`, if useful
+   - `variants.md` -> `05-A-B卷差异.md`, if source variants exist
+   - `corrections.md` -> `06-纠错清单.md`, if useful
    - a public-safe `manifest.json`
 3. Use actual exam month in public naming. If the source says `2023-2024 学年第 2 学期`, the public exam month is normally in 2024, not 2023; state the month assumption in the material README.
 4. Remove local absolute paths such as `/srv/xsy-agent-share/...`.
@@ -187,6 +193,7 @@ Before starting the next PDF, the current run should have an explicit answer for
 - `guided-solutions.md` includes a main walkthrough and selected alternate walkthroughs or a clear reference-only list;
 - `teaching.md` contains transfer, method comparison, or common-mistake notes rather than duplicating the full guided solution, and divergent review has removed low-value template filler;
 - `teaching-review.md` exists when divergent review materially changed `teaching.md`;
+- `variants.md` exists when source A/B volumes, alternate printed versions, or source-provided variant problems are detected; non-primary variants include answers or a recorded reason why no answer is available;
 - `corrections.md` records confirmed or candidate source defects;
 - `questions.md` frontmatter has a reader-facing `display_title`, preview headings preserve multi-subquestion layout, and visible PDF titles do not contain `草稿`;
 - preview Markdown and PDF artifacts regenerated after content changes;

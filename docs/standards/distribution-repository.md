@@ -12,6 +12,7 @@ The distribution repository owns reader-facing products:
 - multi-method reference answers;
 - guided solutions with a mainline walkthrough and selected alternate-method walkthroughs;
 - teaching notes;
+- source variants, such as A/B volume differences, when present;
 - correction notes;
 - reader-facing README files;
 - release assets such as generated PDFs.
@@ -40,7 +41,8 @@ materials/
       02-多解法参考答案.md
       03-详解.md
       04-拓展讲解.md
-      05-纠错清单.md
+      05-A-B卷差异.md   # optional, when source variants exist
+      06-纠错清单.md
       manifest.json
 ```
 
@@ -55,6 +57,8 @@ materials/
 Use actual exam month when known or reasonably inferable. `2024-06-final` is clearer for public readers than `23-24-term2-final`. If the source says `2023-2024 学年第 2 学期`, a final exam normally belongs to the 2024 summer exam season, so use `2024-06-final` or `2024-07-final` according to the best available evidence. If the exact month is uncertain, choose the best known month and state the assumption in the material README.
 
 Reader-facing Markdown filenames should prefer Chinese names. Keep `manifest.json` as a stable machine-readable filename. The workflow workspace may still use English filenames such as `questions.md` and `guided-solutions.md`; translate names during distribution handoff.
+
+When the source has A/B volumes, alternate printed versions, or source-provided variant problems, publish the primary problem set normally and keep non-primary variants in a separate reader-facing file such as `05-A-B卷差异.md`. Do not hide source variants inside the correction log; `纠错清单` is for source defects, not normal variant material.
 
 ## Root README
 

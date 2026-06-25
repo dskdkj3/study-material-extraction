@@ -156,6 +156,28 @@ function writeCorrectionsPreview(previewDir, title, correctionsMd) {
   fs.writeFileSync(path.join(previewDir, "corrections-preview.md"), correctionsOut.join("\n").replace(/\n{3,}/g, "\n\n"));
 }
 
+function writeVariantsPreview(previewDir, title, variantsMd) {
+  if (!variantsMd) return;
+
+  const variantsOut = [
+    "---",
+    `title: "${title}A/B 卷差异"`,
+    'kind: "source_variants_preview"',
+    'source_variants: "variants.md"',
+    'status: "draft"',
+    "---",
+    "",
+    `# ${title}A/B 卷差异`,
+    "",
+    "> 记录来源材料中出现但未混入主公开卷的 A/B 卷差异、变体题面和对应答案。",
+    "",
+    dropStatusBlockquotes(withoutTopLevelTitle(variantsMd)),
+    "",
+  ];
+
+  fs.writeFileSync(path.join(previewDir, "variants-preview.md"), variantsOut.join("\n").replace(/\n{3,}/g, "\n\n"));
+}
+
 function displayTitle(frontmatter) {
   const raw = frontmatter.display_title || frontmatter.publication_title || frontmatter.title || frontmatter.course || path.basename(runDir);
   return raw
@@ -199,10 +221,12 @@ function writePreviewFiles() {
   const answersPath = path.join(runDir, "answers.md");
   const guidedPath = path.join(runDir, "guided-solutions.md");
   const teachingPath = path.join(runDir, "teaching.md");
+  const variantsPath = path.join(runDir, "variants.md");
   const correctionsPath = path.join(runDir, "corrections.md");
   const answersMd = fs.existsSync(answersPath) ? fs.readFileSync(answersPath, "utf8") : "";
   const guidedMd = fs.existsSync(guidedPath) ? fs.readFileSync(guidedPath, "utf8") : "";
   const teachingMd = fs.existsSync(teachingPath) ? fs.readFileSync(teachingPath, "utf8") : "";
+  const variantsMd = fs.existsSync(variantsPath) ? fs.readFileSync(variantsPath, "utf8") : "";
   const correctionsMd = fs.existsSync(correctionsPath) ? fs.readFileSync(correctionsPath, "utf8") : "";
   const { frontmatter } = stripFrontmatter(questionsMd);
   const answerFrontmatter = answersMd ? stripFrontmatter(answersMd).frontmatter : {};
@@ -294,6 +318,7 @@ function writePreviewFiles() {
     fs.writeFileSync(path.join(previewDir, "guided-solutions-preview.md"), guidedOut.join("\n").replace(/\n{3,}/g, "\n\n"));
   }
 
+  writeVariantsPreview(previewDir, title, variantsMd);
   writeCorrectionsPreview(previewDir, title, correctionsMd);
 
   if (teachingMd) {

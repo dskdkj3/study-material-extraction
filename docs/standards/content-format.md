@@ -37,9 +37,12 @@ Use these canonical editable files:
 - `guided-solutions.md`: default step-by-step solutions for readers who need more explanation than `answers.md`, including selected alternate-method walkthroughs when useful;
 - `alternate-method-discovery.md`: per-problem record of alternate-method rounds, candidates, verification, adoption decisions, and stop reasons;
 - `teaching.md`: flexible transfer and extension notes, written separately from both reference answers and guided solutions;
+- `variants.md`: optional source-variant record for A/B volumes, alternate printed versions, or source-provided variant problems that should be preserved without mixing into the main public problem set;
 - `corrections.md`: source-correction log for confirmed or candidate source typos, wrong answers, and source-solution defects.
 
 Do not duplicate the same body content across these files by hand when a generated preview can combine them.
+
+Normal A/B volume differences are source variants, not source defects. Preserve them in `variants.md` with answers or solutions when available; use `corrections.md` only for typos, wrong answers, or internally inconsistent source claims.
 
 ## Public Filenames
 
@@ -53,7 +56,8 @@ Recommended public Markdown filenames:
 - `02-多解法参考答案.md`
 - `03-详解.md`
 - `04-拓展讲解.md`
-- `05-纠错清单.md`
+- `05-A-B卷差异.md`, when source variants exist
+- `06-纠错清单.md`
 - `manifest.json`
 
 Recommended GitHub Release PDF asset filenames:
