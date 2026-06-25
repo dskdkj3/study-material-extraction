@@ -43,7 +43,9 @@ Do not duplicate the same body content across these files by hand when a generat
 
 ## Public Filenames
 
-The extraction workspace may keep stable English filenames because scripts and standards depend on them. Public distribution repositories should prefer Chinese reader-facing filenames for Markdown and release assets.
+The extraction workspace may keep stable English filenames because scripts and standards depend on them. Public distribution repositories should prefer Chinese reader-facing filenames for Markdown files.
+
+For GitHub Release PDF assets, use ASCII-safe filenames. GitHub may rewrite release asset filenames that contain special or non-alphanumeric characters; Chinese PDF filenames can collapse into the same sanitized filename and fail upload with a duplicate-attachment error. Put the Chinese title and document purpose in README/release notes instead of relying on the asset filename.
 
 Recommended public Markdown filenames:
 
@@ -54,13 +56,13 @@ Recommended public Markdown filenames:
 - `05-纠错清单.md`
 - `manifest.json`
 
-Recommended PDF asset filenames:
+Recommended GitHub Release PDF asset filenames:
 
-- `2024-06-高等数学一（II）期末真题-仅题目-v1.0.pdf`
-- `2024-06-高等数学一（II）期末真题-多解法参考答案-v1.0.pdf`
-- `2024-06-高等数学一（II）期末真题-详解-v1.0.pdf`
-- `2024-06-高等数学一（II）期末真题-拓展讲解-v1.0.pdf`
-- `2024-06-高等数学一（II）期末真题-纠错清单-v1.0.pdf`
+- `2024-06-gaoshu1-ii-final-questions-v1.0.pdf`
+- `2024-06-gaoshu1-ii-final-reference-solutions-v1.0.pdf`
+- `2024-06-gaoshu1-ii-final-guided-solutions-v1.0.pdf`
+- `2024-06-gaoshu1-ii-final-teaching-notes-v1.0.pdf`
+- `2024-06-gaoshu1-ii-final-errata-v1.0.pdf`
 
 Keep machine-oriented files such as `manifest.json` in stable ASCII names.
 

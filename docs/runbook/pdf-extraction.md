@@ -170,7 +170,7 @@ Recommended handoff:
 3. Use actual exam month in public naming. If the source says `2023-2024 学年第 2 学期`, the public exam month is normally in 2024, not 2023; state the month assumption in the material README.
 4. Remove local absolute paths such as `/srv/xsy-agent-share/...`.
 5. Keep raw PDF, crop images, page renders, OCR lane dumps, and temporary logs out of the distribution repository by default.
-6. Attach generated PDFs to a GitHub Release with Chinese reader-facing filenames, or document any intentional exception in the material README.
+6. Attach generated PDFs to a GitHub Release with ASCII-safe asset filenames. GitHub can rewrite non-ASCII asset names and create duplicate filename collisions; keep Chinese document names in README/release notes.
 7. Make the material README human-readable: tell readers what to open, where PDFs are, and what corrections are known.
 
 ## Run Completion Checklist
@@ -191,7 +191,7 @@ Before starting the next PDF, the current run should have an explicit answer for
 - generated PDFs have page counts, hashes, renderer notes, and spot-check status in `manifest.json`;
 - release PDFs have passed metadata audit; if metadata was cleaned, text extraction and visual screenshots were revalidated after cleaning;
 - public distribution copy has no local absolute paths, raw OCR/crop references, private notes, or broken release links;
-- public distribution filenames are Chinese-reader-facing for Markdown/PDF, while machine files such as `manifest.json` remain stable;
+- public Markdown filenames are Chinese-reader-facing; GitHub Release PDF asset filenames are ASCII-safe; machine files such as `manifest.json` remain stable;
 - release assets are uploaded, or `pending_upload` plus `/srv/xsy-agent-share/.../UPLOAD.md` exists;
 - final material status does not overclaim mathematical certification.
 

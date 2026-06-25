@@ -109,4 +109,4 @@ materials/
 
 Markdown 留在 Git 里，PDF 可以作为 GitHub Release assets 发布；README 负责把读者带到“题目版、多解法参考答案、详解版、拓展讲解”的下载或阅读入口。
 
-命名优先使用实际考试月份，例如 `2024-06-final`。如果来源写的是 `2023-2024 学年第 2 学期`，期末公开命名通常应落到 2024 年 6/7 月，而不是 2023 年。公开给读者看的 Markdown 和 PDF 文件名优先用中文，`manifest.json` 这类机器文件保留稳定英文名。
+命名优先使用实际考试月份，例如 `2024-06-final`。如果来源写的是 `2023-2024 学年第 2 学期`，期末公开命名通常应落到 2024 年 6/7 月，而不是 2023 年。公开给读者看的 Markdown 文件名优先用中文，GitHub Release PDF asset 用 ASCII 安全名，中文含义写在 README 和 release notes 里；`manifest.json` 这类机器文件保留稳定英文名。

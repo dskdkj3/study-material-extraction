@@ -109,11 +109,13 @@ The version number is a publication package version, not a claim of mathematical
 
 Recommended release assets:
 
-- `2024-06-高等数学一（II）期末真题-仅题目-v1.0.pdf`
-- `2024-06-高等数学一（II）期末真题-多解法参考答案-v1.0.pdf`
-- `2024-06-高等数学一（II）期末真题-详解-v1.0.pdf`
-- `2024-06-高等数学一（II）期末真题-拓展讲解-v1.0.pdf`
-- `2024-06-高等数学一（II）期末真题-纠错清单-v1.0.pdf`, when useful
+- `2024-06-gaoshu1-ii-final-questions-v1.0.pdf`
+- `2024-06-gaoshu1-ii-final-reference-solutions-v1.0.pdf`
+- `2024-06-gaoshu1-ii-final-guided-solutions-v1.0.pdf`
+- `2024-06-gaoshu1-ii-final-teaching-notes-v1.0.pdf`
+- `2024-06-gaoshu1-ii-final-errata-v1.0.pdf`, when useful
+
+Keep release asset filenames ASCII-safe for GitHub upload. Put Chinese document labels in the material README and release notes.
 
 It is acceptable to commit small PDFs temporarily only when a material README explicitly says the repository is intentionally carrying those generated files. Do not let this become the default.
 
