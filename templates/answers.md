@@ -1,5 +1,7 @@
 ---
 title: ""
+display_title: ""
+exam_month: ""
 course: ""
 term: ""
 source_pdf: ""
@@ -13,7 +15,7 @@ reference_check_status: "not_started"
 kind: "independent_answers"
 ---
 
-# {{ title }}参考答案草稿
+# {{ display_title }}参考答案
 
 > 状态：draft。本文基于已复核通过的 `questions.md` 独立解题，未参考 `source.md` 中的来源解析。
 

@@ -15,6 +15,7 @@ Each canonical Markdown file starts with YAML frontmatter:
 ```md
 ---
 title: "23 高数一（II）真题期末"
+display_title: "2023-06 高等数学一（II）期末真题"
 course: "高等数学一（II）"
 term: "2023-2024 学年第 2 学期"
 source_pdf: "/srv/xsy-agent-share/23高数一（II）真题期末_all_pages.pdf"
@@ -24,7 +25,7 @@ status: "draft"
 ---
 ```
 
-Frontmatter is metadata. It must not contain problem or answer body content.
+Frontmatter is metadata. It must not contain problem or answer body content. Use `display_title` for reader-facing PDF and distribution titles when the source filename or internal title is abbreviated, ambiguous, or still contains draft wording.
 
 ## Files
 
@@ -111,7 +112,7 @@ If there is only one method, do not write `解法 A`; use a descriptive method t
 
 逐步展开求解。
 
-### 检查答案
+### 回看关键条件
 
 说明符号、范围、端点、方向、收敛或量纲等检查点。
 
@@ -129,26 +130,22 @@ Guided solutions are the default detailed product. They must expand the recommen
 ## Teaching Markdown Pattern
 
 ```md
-## 1. 拓展讲解
+# 2023-06 高等数学一（II）期末真题拓展讲解
 
-### 这一类题怎么认
+## 专题一：多元积分先看区域、对称性和降维
 
-说明相似题型的识别信号。
+对应题目：第 1、2、6 题。
 
-### 方法怎么选
+说明这组题共同训练的识别信号、方法选择和迁移方式。
 
-比较可用方法，说明为什么当前方法更稳或更短。
+## 专题二：曲线/曲面积分的三问法
 
-### 相似题型
+对应题目：第 4、5 题。
 
-说明同一类问题还会怎样变形。
-
-### 易错点
-
-列出常见错误和检查方式。
+说明相邻题型、常用定理和判断顺序。
 ```
 
-Teaching explanations should not mechanically repeat every guided-solution step. They are optional per problem and should focus on transfer value.
+Teaching explanations should not mechanically repeat every guided-solution step. They may be topic-based or problem-based, but they should stay selective and focus on transfer value.
 
 ## Correction Markdown Pattern
 

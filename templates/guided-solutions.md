@@ -1,5 +1,7 @@
 ---
 title: ""
+display_title: ""
+exam_month: ""
 course: ""
 term: ""
 source_pdf: ""
@@ -10,7 +12,7 @@ guided_solution_status: "draft"
 kind: "guided_solutions"
 ---
 
-# {{ title }}详解草稿
+# {{ display_title }}详解
 
 > 状态：draft。本文基于已稳定的 `questions.md` 与 `answers.md`，逐题展开一条推荐主线，并选讲值得学习的备用解法；`answers.md` 中可能另有只作参考的解法。
 
@@ -28,7 +30,7 @@ kind: "guided_solutions"
 
 逐步展开求解。
 
-### 检查答案
+### 回看关键条件
 
 说明符号、范围、端点、方向、收敛或量纲等检查点。
 

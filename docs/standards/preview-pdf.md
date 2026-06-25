@@ -18,6 +18,8 @@ Do not merge guided solutions or teaching explanations into `answers-preview.pdf
 
 Do not merge source-correction records into `answers-preview.pdf` or `guided-solutions-preview.pdf` by default. Corrections support quality review and publication notes; they are not part of the ordinary study flow.
 
+`teaching-preview.pdf` may be topic-based instead of problem-by-problem. If `teaching.md` uses numeric problem sections, combine those sections with their prompts. If it uses topical sections, include a compact reviewed-problem index first, then render the topical document.
+
 ## Heading Rules
 
 Question-only preview:
@@ -36,11 +38,25 @@ Combined answer or guided-solution preview:
 
 Avoid meaningless headings such as `1. 题目` or `1. 题目与答案` in rendered previews. The problem heading should carry the problem itself, or a concise problem summary when the full prompt is too long.
 
+If a problem has multiple subquestions, use a concise problem summary in the heading when helpful, then render the complete subquestions as body text below it. Do not flatten `（1）...` and `（2）...` into one long heading.
+
+The source `questions.md` may use a meaningful second-level heading such as `## 11. 参数反常积分：一致收敛与积分计算` for this purpose. Plain headings such as `## 11. 题目` are ignored by the preview builder.
+
 If there is only one answer method, omit `解法 A` and use a descriptive method heading:
 
 ```md
 ### 按区域直接积分
 ```
+
+## Title Rules
+
+Use a reader-facing title, preferably from `display_title` in `questions.md` frontmatter. The title should include the exam date slug when it is known or reasonably inferred, for example:
+
+```yaml
+display_title: "2023-06 高等数学一（II）期末真题"
+```
+
+Do not put `草稿` in the PDF title or first-level heading. Draft or review status belongs in frontmatter, the material README, `manifest.json`, or a short status note, not in the visible title.
 
 ## Typography
 
@@ -86,7 +102,7 @@ The current robust path for Markdown with LaTeX math is:
      --mathjax=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js \
      --css=print.css \
      --metadata title= \
-     --metadata pagetitle="多解法参考答案草稿" \
+     --metadata pagetitle="多解法参考答案" \
      -o preview/answers-preview.html
    ```
 
@@ -101,7 +117,7 @@ The current robust path for Markdown with LaTeX math is:
      --no-sandbox \
      --allow-file-access-from-files \
      --run-all-compositor-stages-before-draw \
-     --virtual-time-budget=15000 \
+     --virtual-time-budget=60000 \
      --no-pdf-header-footer \
      --print-to-pdf=preview/answers-preview.pdf \
      "file://$(pwd)/preview/answers-preview.html"
@@ -123,5 +139,8 @@ For every generated PDF:
 
 - run `pdfinfo` and record page count;
 - visually inspect the first page and any likely overflow page;
+- for long answer/guided PDFs, visually inspect the last page and confirm it contains the expected final problem, not an early problem with later content only present in the text layer;
 - check that math is rendered, not printed as raw LaTeX;
+- check that visible titles use the reader-facing exam title, not an internal run slug, old filename shorthand, or a title containing `草稿`;
+- check that multi-part questions keep their line breaks, or use a concise summary heading with the original subquestions below it;
 - update `manifest.json` with preview path, pages, sha256, renderer, and caveats.

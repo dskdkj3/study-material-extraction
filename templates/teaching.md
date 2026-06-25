@@ -1,5 +1,7 @@
 ---
 title: ""
+display_title: ""
+exam_month: ""
 course: ""
 term: ""
 source_pdf: ""
@@ -10,7 +12,7 @@ teaching_status: "draft"
 kind: "teaching_explanations"
 ---
 
-# {{ title }}拓展讲解草稿
+# {{ display_title }}拓展讲解
 
 > 状态：draft。本文用于相似题型、方法迁移、常见坑和方法比较；不重复 `guided-solutions.md` 的每一步详解。
 

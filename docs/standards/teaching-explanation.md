@@ -17,6 +17,8 @@ They may cover:
 
 They do not need to repeat every step already present in `guided-solutions.md`.
 
+The target reader may be learning the topic for the first time. The teaching layer should help that reader recognize the next similar problem, choose a workable method, and avoid meaningful traps. It should not pad the file with obvious arithmetic reminders.
+
 ## Relationship To Other Files
 
 - `answers.md` answers the problem concisely.
@@ -29,7 +31,16 @@ If a note only helps the reader follow this exact solution, it usually belongs i
 
 ## Flexible Structure
 
-Do not force every problem into the same section list. Use only the sections that are useful.
+Do not force every problem into the same section list. Use only the sections that are useful, and allow a problem to be absent when the guided solution already covers everything worth saying.
+
+Prefer one of these shapes:
+
+- selected problem notes, for a problem that has a genuinely transferable idea;
+- grouped topic notes, when several problems teach the same family;
+- method-comparison notes, when choosing between methods is the main learning value;
+- trap notes, when the mistake is common and not obvious from the guided solution.
+
+Avoid making every problem follow `相似题型与迁移方向` plus `常见坑与检查方式`. That pattern quickly becomes a template instead of a teaching layer.
 
 Common section choices:
 
@@ -55,6 +66,42 @@ Common section choices:
 
 For trivial problems, `teaching.md` may omit the problem entirely or write a short note. Completeness is not measured by one note per problem; it is measured by whether the teaching layer adds transfer value.
 
+Before finalizing public material, run at least two independent divergent review passes:
+
+- a reader-value critic that removes notes which are too obvious, too mechanical, or duplicated from `guided-solutions.md`;
+- a problem-family researcher that proposes nearby families, variants, and method-choice lessons.
+
+Useful candidate labels:
+
+- `family_recognition`: how to recognize the problem family;
+- `method_choice`: how to choose between methods;
+- `variant_transfer`: nearby variants worth practicing;
+- `trap_diagnosis`: common wrong paths and checks;
+- `minimal_prerequisite`: a prerequisite that helps beyond this exact problem.
+
+For larger sets, a third pass may compare teaching notes against accepted and rejected alternate methods. Keep the resulting `teaching.md` selective; do not include every suggestion from the divergent passes.
+
+Recommended review ownership:
+
+- one critic reads as a near-beginner and marks anything that feels like filler, arithmetic trivia, or a copied checklist;
+- one researcher groups problems by transferable families and proposes only the families worth teaching;
+- one editor, when needed, rewrites the accepted notes into a compact reader-facing structure.
+
+Keep a short note in the run workspace when divergent review materially changes `teaching.md`, for example `teaching-review.md`. The note should record which suggestions were accepted, rejected, or moved to `guided-solutions.md`.
+
+## Rejection Rules
+
+Reject or move a note out of `teaching.md` when it is mainly one of these:
+
+- pure arithmetic or algebra that the guided solution already shows, such as only reminding that `\sqrt{2^2+1^2}=\sqrt5`;
+- a restatement of the answer step with no transfer point;
+- a theorem name with no condition, choice rule, or diagnostic value;
+- an advanced method that is harder than the original course-level method and not quickly learnable;
+- generic advice that could be pasted under every problem;
+- a warning about a mistake that is not plausible for this problem family.
+
+Low-value but locally helpful details may belong in `guided-solutions.md` if they help a beginner follow one step. Coherent but unsuitable advanced routes belong in `rejected-methods.md`.
+
 ## Granularity
 
 - Prefer short, reusable explanations over long repetition of solution steps.
@@ -62,6 +109,7 @@ For trivial problems, `teaching.md` may omit the problem entirely or write a sho
 - Keep prerequisites local: explain only what a learner needs to understand this family of problems.
 - Include method comparison only when the comparison changes a student's future choice.
 - Include advanced methods only when they are learnable in a short time and do not distract from the course level.
+- Drop elementary arithmetic reminders unless the arithmetic is a known source of conceptual mistakes.
 
 ## Problem Families
 
@@ -85,4 +133,4 @@ When `teaching.md` exists, generate:
 - `preview/teaching-preview.md`
 - `preview/teaching-preview.pdf`
 
-The preview should combine reviewed questions with teaching notes, but it may leave some problems without notes when no useful transfer point exists.
+The preview should combine reviewed questions with teaching notes, but it should only render problems that have teaching notes. Missing problem numbers mean this edition has no separate transfer note for those problems.

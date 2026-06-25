@@ -134,6 +134,14 @@ Use `blocked` for missing decisions or materials. Use `failed` for execution fai
 
 12. Generate or update `teaching.md` when there is useful transfer value: related problem families, method comparison, short prerequisite refreshers, common traps, or variants. Do not force a teaching note for every problem.
 
+    For public material, run divergent read-only review before finalizing `teaching.md`. Prefer a small set of independent perspectives instead of one context that already knows the current draft:
+
+    - a topic mapper that groups problems into reusable families;
+    - a beginner-confusion critic that removes notes which are too obvious, too mechanical, or duplicated from `guided-solutions.md`;
+    - a method-transfer reviewer that checks accepted/rejected alternate methods for teachable ideas.
+
+    The main Agent should edit the final file after these passes. Do not concatenate subagent output directly. If the review materially changes the teaching layer, record the accepted, rejected, and moved ideas in `teaching-review.md`.
+
 13. Generate preview Markdown:
 
    ```sh
@@ -174,8 +182,10 @@ Before starting the next PDF, the current run should have an explicit answer for
 - alternate-method discovery completed or deliberately skipped with a reason;
 - every accepted answer method considered for `guided-solutions.md` expansion;
 - `guided-solutions.md` includes a main walkthrough and selected alternate walkthroughs or a clear reference-only list;
-- `teaching.md` contains transfer, method comparison, or common-mistake notes rather than duplicating the full guided solution;
+- `teaching.md` contains transfer, method comparison, or common-mistake notes rather than duplicating the full guided solution, and divergent review has removed low-value template filler;
+- `teaching-review.md` exists when divergent review materially changed `teaching.md`;
 - `corrections.md` records confirmed or candidate source defects;
+- `questions.md` frontmatter has a reader-facing `display_title`, preview headings preserve multi-subquestion layout, and visible PDF titles do not contain `草稿`;
 - preview Markdown and PDF artifacts regenerated after content changes;
 - generated PDFs have page counts, hashes, renderer notes, and spot-check status in `manifest.json`;
 - public distribution copy has no local absolute paths, raw OCR/crop references, private notes, or broken release links;

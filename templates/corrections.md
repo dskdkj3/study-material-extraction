@@ -1,5 +1,7 @@
 ---
 title: ""
+display_title: ""
+exam_month: ""
 course: ""
 term: ""
 source_pdf: ""
@@ -9,7 +11,7 @@ status: "draft"
 kind: "source_correction_log"
 ---
 
-# {{ title }}来源纠错记录
+# {{ display_title }}来源纠错记录
 
 > 状态：draft。本文记录来源解析中的笔误、错解、排版错误或其它会影响答案可信度的问题。普通 OCR 不确定性不要写入这里，除非已经复核原图并确认是来源材料自身的问题。
 

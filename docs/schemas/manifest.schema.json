@@ -7,6 +7,7 @@
   "properties": {
     "schema_version": { "type": "integer", "minimum": 1 },
     "run_slug": { "type": "string", "minLength": 1 },
+    "display_title": { "type": "string" },
     "source_pdf": { "type": "string", "minLength": 1 },
     "workspace": { "type": "string", "minLength": 1 },
     "stage": {

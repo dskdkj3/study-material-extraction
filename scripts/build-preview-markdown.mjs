@@ -62,6 +62,22 @@ function sectionsByProblem(markdown) {
   return sections;
 }
 
+function headingsByProblem(markdown) {
+  const { body } = stripFrontmatter(markdown);
+  const headings = new Map();
+
+  for (const line of body.split(/\r?\n/)) {
+    const match = line.match(/^##\s+(\d+)\.\s*(.*)$/);
+    if (!match) continue;
+    const heading = match[2].trim();
+    if (heading && !["题目", "参考答案", "拓展讲解", "主线详解"].includes(heading)) {
+      headings.set(Number(match[1]), heading);
+    }
+  }
+
+  return headings;
+}
+
 function dropStatusBlockquotes(markdown) {
   const lines = markdown.split("\n");
   const out = [];
@@ -78,8 +94,8 @@ function dropStatusBlockquotes(markdown) {
   return out.join("\n").trim();
 }
 
-function inlineProblemTitle(markdown) {
-  return dropStatusBlockquotes(markdown)
+function normalizeInlineProblemText(markdown) {
+  return markdown
     .replace(/\$\$([\s\S]*?)\$\$/g, (_, math) => `$${math.trim()}$`)
     .replace(/\\\[([\s\S]*?)\\\]/g, (_, math) => `$${math.trim()}$`)
     .replace(/\\displaystyle\s*/g, "")
@@ -87,6 +103,20 @@ function inlineProblemTitle(markdown) {
     .replace(/\s+/g, " ")
     .trim()
     .replace(/[。；;，,]\s*$/u, "");
+}
+
+function problemPrompt(markdown) {
+  const lines = dropStatusBlockquotes(markdown)
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  let firstLine = lines.shift() ?? "";
+  if (/^求[：:]?$/u.test(firstLine) && lines.length > 0) {
+    firstLine = `${firstLine} ${lines.shift()}`;
+  }
+  const heading = normalizeInlineProblemText(firstLine);
+  const body = lines.map((line) => normalizeInlineProblemText(line)).filter(Boolean).join("\n\n");
+  return { heading, body };
 }
 
 function normalizeAnswerHeadings(markdown) {
@@ -127,7 +157,7 @@ function writeCorrectionsPreview(previewDir, title, correctionsMd) {
 }
 
 function displayTitle(frontmatter) {
-  const raw = frontmatter.title || frontmatter.course || path.basename(runDir);
+  const raw = frontmatter.display_title || frontmatter.publication_title || frontmatter.title || frontmatter.course || path.basename(runDir);
   return raw
     .replace(/\s+(questions|answers)\s+draft$/i, "")
     .replace(/\s+题目草稿$/u, "")
@@ -139,6 +169,29 @@ function displayTitle(frontmatter) {
     .replace(/\s+教学讲解草稿$/u, "")
     .replace(/\s+拓展讲解草稿$/u, "")
     .trim();
+}
+
+function pushProblemHeading(out, n, markdown, questionHeadings, level = "##") {
+  const customHeading = questionHeadings.get(n);
+  const { heading, body } = problemPrompt(markdown);
+  out.push(`${level} ${n}. ${customHeading || heading || "题目"}`);
+  if (customHeading) {
+    out.push("");
+    out.push([heading, body].filter(Boolean).join("\n\n"));
+  } else if (body) {
+    out.push("");
+    out.push(body);
+  }
+}
+
+function pushProblemIndex(out, problemNumbers, questions, questionHeadings) {
+  out.push("## 题目索引");
+  out.push("");
+
+  for (const n of problemNumbers) {
+    pushProblemHeading(out, n, questions.get(n) ?? "", questionHeadings, "###");
+    out.push("");
+  }
 }
 
 function writePreviewFiles() {
@@ -156,6 +209,7 @@ function writePreviewFiles() {
   const title = displayTitle(frontmatter);
 
   const questions = sectionsByProblem(questionsMd);
+  const questionHeadings = headingsByProblem(questionsMd);
   const answers = answersMd ? sectionsByProblem(answersMd) : new Map();
   const guided = guidedMd ? sectionsByProblem(guidedMd) : new Map();
   const problemNumbers = [...questions.keys()].sort((a, b) => a - b);
@@ -177,7 +231,7 @@ function writePreviewFiles() {
   ];
 
   for (const n of problemNumbers) {
-    questionOut.push(`## ${n}. ${inlineProblemTitle(questions.get(n) ?? "")}`);
+    pushProblemHeading(questionOut, n, questions.get(n) ?? "", questionHeadings);
     questionOut.push("");
   }
 
@@ -186,26 +240,26 @@ function writePreviewFiles() {
   if (answersMd) {
     const sourceReferenceUsed = answerFrontmatter.source_reference_used === true || answerFrontmatter.source_reference_used === "true";
     const answerIntro = sourceReferenceUsed
-      ? "> 先独立解题，随后参考未复核的 `source.md` 来源解析做 reference-check；`source.md` 不视为权威答案。"
-      : "> 独立解题草稿；题干来自已复核的 `questions.md`，答案未参考 `source.md` 中的来源解析。";
+      ? "> 状态：Agent 独立解题后做过 reference-check；`source.md` 来源解析仅作参考，不视为权威答案。"
+      : "> 状态：Agent 独立解题版；题干来自已复核的 `questions.md`，答案未参考 `source.md` 中的来源解析。";
     const answerOut = [
       "---",
-      `title: "${title}多解法参考答案草稿"`,
+      `title: "${title}多解法参考答案"`,
       'kind: "answers_with_questions_preview"',
       'source_questions: "questions.md"',
       'source_answers: "answers.md"',
       `source_reference_used: ${sourceReferenceUsed}`,
-      'status: "draft"',
+      'status: "agent_checked_draft"',
       "---",
       "",
-      `# ${title}多解法参考答案草稿`,
+      `# ${title}多解法参考答案`,
       "",
       answerIntro,
       "",
     ];
 
     for (const n of problemNumbers) {
-      answerOut.push(`## ${n}. ${inlineProblemTitle(questions.get(n) ?? "")}`);
+      pushProblemHeading(answerOut, n, questions.get(n) ?? "", questionHeadings);
       answerOut.push("");
       answerOut.push(normalizeAnswerHeadings(answers.get(n) ?? "_暂无参考答案。_"));
       answerOut.push("");
@@ -217,21 +271,21 @@ function writePreviewFiles() {
   if (guidedMd) {
     const guidedOut = [
       "---",
-      `title: "${title}详解草稿"`,
+      `title: "${title}详解"`,
       'kind: "guided_solutions_with_questions_preview"',
       'source_questions: "questions.md"',
       'source_guided_solutions: "guided-solutions.md"',
-      'status: "draft"',
+      'status: "agent_checked_draft"',
       "---",
       "",
-      `# ${title}详解草稿`,
+      `# ${title}详解`,
       "",
-      "> 详解草稿；逐题展开一条推荐路径，并选讲值得学习的备用解法。题干来自已复核的 `questions.md`，完整多解法参考见 `answers.md`。",
+      "> 逐题展开一条推荐路径，并选讲值得学习的备用解法。题干来自已复核的 `questions.md`，完整多解法参考见 `answers.md`。",
       "",
     ];
 
     for (const n of problemNumbers) {
-      guidedOut.push(`## ${n}. ${inlineProblemTitle(questions.get(n) ?? "")}`);
+      pushProblemHeading(guidedOut, n, questions.get(n) ?? "", questionHeadings);
       guidedOut.push("");
       guidedOut.push(normalizeAnswerHeadings(guided.get(n) ?? "_暂无详解。_"));
       guidedOut.push("");
@@ -244,25 +298,37 @@ function writePreviewFiles() {
 
   if (teachingMd) {
     const teaching = sectionsByProblem(teachingMd);
+    const teachingHeadings = headingsByProblem(teachingMd);
+    const teachingProblemNumbers = [...teaching.keys()].filter((n) => questions.has(n)).sort((a, b) => a - b);
+    const teachingIntro =
+      teachingProblemNumbers.length > 0
+        ? "> 面向迁移、方法选择和常见误区的补充讲解；题干来自已复核的 `questions.md`，不重复 `guided-solutions.md` 的每一步详解。未出现的题目表示本版暂不单独拓展。"
+        : "> 面向迁移、方法选择和常见误区的专题讲解；题干来自已复核的 `questions.md`，不重复 `guided-solutions.md` 的每一步详解。";
     const teachingOut = [
       "---",
-      `title: "${title}拓展讲解草稿"`,
+      `title: "${title}拓展讲解"`,
       'kind: "teaching_with_questions_preview"',
       'source_questions: "questions.md"',
       'source_teaching: "teaching.md"',
-      'status: "draft"',
+      'status: "agent_checked_draft"',
       "---",
       "",
-      `# ${title}拓展讲解草稿`,
+      `# ${title}拓展讲解`,
       "",
-      "> 拓展迁移草稿；题干来自已复核的 `questions.md`，不重复 `guided-solutions.md` 的每一步详解。",
+      teachingIntro,
       "",
     ];
 
-    for (const n of problemNumbers) {
-      teachingOut.push(`## ${n}. ${inlineProblemTitle(questions.get(n) ?? "")}`);
-      teachingOut.push("");
-      teachingOut.push(teaching.get(n) ?? "_暂无拓展讲解。_");
+    if (teachingProblemNumbers.length > 0) {
+      for (const n of teachingProblemNumbers) {
+        pushProblemHeading(teachingOut, n, questions.get(n) ?? "", teachingHeadings);
+        teachingOut.push("");
+        teachingOut.push(teaching.get(n));
+        teachingOut.push("");
+      }
+    } else {
+      pushProblemIndex(teachingOut, problemNumbers, questions, questionHeadings);
+      teachingOut.push(dropStatusBlockquotes(withoutTopLevelTitle(teachingMd)));
       teachingOut.push("");
     }
 

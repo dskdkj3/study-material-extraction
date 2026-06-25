@@ -1,5 +1,7 @@
 ---
 title: ""
+display_title: ""
+exam_month: ""
 course: ""
 term: ""
 source_pdf: ""
@@ -9,7 +11,7 @@ status: "draft"
 kind: "questions_only"
 ---
 
-# {{ title }}（仅题目）
+# {{ display_title }}（仅题目）
 
 ## 1. 题目
 
@@ -17,3 +19,10 @@ kind: "questions_only"
 
 题目正文。
 
+## 2. 长题或多问题的简短标题
+
+> 状态：needs_review；source_pages: []
+
+（1）第一小问正文。
+
+（2）第二小问正文。

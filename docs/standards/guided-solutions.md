@@ -57,7 +57,7 @@ Use this default structure, omitting sections only when they would be empty:
 
 逐步展开求解。
 
-### 检查答案
+### 回看关键条件
 
 说明符号、范围、端点、方向、收敛或量纲等检查点。
 
@@ -83,6 +83,8 @@ For selected alternate methods, use descriptive method headings:
 ```
 
 Do not write `解法 A` when there is only one method. For selected alternates, prefer `选讲解法：...` with a Chinese descriptive title.
+
+Do not add a mechanical final check section to every problem. Keep `回看关键条件` only when it names a real risk, such as orientation, endpoint inclusion, convergence uniformity, sign, constant factor, dimension, or theorem hypotheses. If the only possible note is "代回可验证" or another generic sentence, omit the section.
 
 ## Adoption Of Alternate Methods
 
