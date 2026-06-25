@@ -143,4 +143,26 @@ For every generated PDF:
 - check that math is rendered, not printed as raw LaTeX;
 - check that visible titles use the reader-facing exam title, not an internal run slug, old filename shorthand, or a title containing `草稿`;
 - check that multi-part questions keep their line breaks, or use a concise summary heading with the original subquestions below it;
+- run a metadata audit before public release, for example `mat2 --show *.pdf`;
+- do not blindly publish `mat2 --inplace` output for PDFs: it may remove useful text layers or search/copy behavior. If any metadata cleaning tool is used, re-check page counts, visible screenshots, `pdftotext` output, and hashes before replacing release assets;
 - update `manifest.json` with preview path, pages, sha256, renderer, and caveats.
+
+## Metadata Audit
+
+The default release gate is audit-first:
+
+```sh
+nix shell nixpkgs#mat2 -c mat2 --show *.pdf
+pdfinfo file.pdf
+pdftotext -f 1 -l 1 file.pdf -
+```
+
+Acceptable metadata includes generic PDF format information and renderer provenance when retaining search/copy text is more valuable than aggressive anonymisation. Unacceptable metadata includes local absolute paths, usernames, source checkout paths, private URLs, tokens, comments, hidden attachments, JavaScript, or timestamps that are not intended to be public.
+
+If cleanup is required, prefer the least destructive tool and prove the cleaned PDF still has:
+
+- the same expected page count;
+- visible math and CJK text in screenshots;
+- usable text extraction for at least first page and a late page;
+- no new metadata leak in `mat2 --show` / `pdfinfo`;
+- updated `SHA256SUMS.txt` and manifest hashes.

@@ -189,6 +189,7 @@ Before starting the next PDF, the current run should have an explicit answer for
 - `questions.md` frontmatter has a reader-facing `display_title`, preview headings preserve multi-subquestion layout, and visible PDF titles do not contain `草稿`;
 - preview Markdown and PDF artifacts regenerated after content changes;
 - generated PDFs have page counts, hashes, renderer notes, and spot-check status in `manifest.json`;
+- release PDFs have passed metadata audit; if metadata was cleaned, text extraction and visual screenshots were revalidated after cleaning;
 - public distribution copy has no local absolute paths, raw OCR/crop references, private notes, or broken release links;
 - public distribution filenames are Chinese-reader-facing for Markdown/PDF, while machine files such as `manifest.json` remain stable;
 - release assets are uploaded, or `pending_upload` plus `/srv/xsy-agent-share/.../UPLOAD.md` exists;
