@@ -2,24 +2,25 @@
 
 This file defines the default visual style for generated study-material PDFs. It is intentionally practical: Markdown remains the source of truth, and PDF styling should be reproducible by the runbook.
 
+The visual baseline is the already published `2024-06 高等数学一（II）期末真题` PDF set. New PDFs should match that set unless a deliberate collection-wide redesign is approved.
+
 ## Page Shape
 
 - Use A4 paper for public PDFs.
-- Use `ctexart` with `xelatex` when using the LaTeX fallback.
-- Default body size: `11pt`.
-- Default margins: `20mm`.
-- Prefer simple footer page numbers. Do not rely on ad hoc renderer headers whose style changes between Brave, Chromium, and LaTeX.
+- Primary renderer: Pandoc HTML + MathJax + headless Brave/Chromium.
+- CSS: repository `scripts/print.css`.
+- Expected PDF producer shape: Chrome/Skia, not LaTeX/xdvipdfmx.
+- Do not add visible body headers, footers, or centered page numbers. The 2024-06 PDFs have clean A4 pages without LaTeX-style footer numbers.
 - The first visible title should be the reader-facing exam title from `display_title`; it must not contain `草稿`, internal slugs, or source filenames.
 
-Recommended fallback command variables:
+Reference command shape:
 
 ```sh
--V documentclass=ctexart \
--V classoption=11pt \
--V papersize=a4 \
--V geometry:margin=20mm \
--V pagestyle=plain
+node scripts/build-preview-markdown.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
+nix shell nixpkgs#chromium -c node scripts/render-preview-pdf.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
 ```
+
+LaTeX PDF output is only a temporary diagnostic fallback. It must not be used for public/review PDFs that are meant to match the house style.
 
 ## Heading Hierarchy
 
@@ -30,11 +31,11 @@ Generated combined previews should use this hierarchy:
 
 ## 一、单项选择题
 
-### 1. 累次积分可以写成
+## 1. 累次积分可以写成
 ```
 
 - Part headings such as `一、单项选择题` are level 2.
-- Problem headings are level 3 when part headings exist.
+- Problem headings are also level 2 in combined previews. This intentionally matches the 2024-06 PDFs where every problem title uses the blue left-rule heading style.
 - Problem headings must be faithful to the original prompt. Do not use invented type labels such as `小圆域二重积分极限` when the original prompt is simply a formula blank.
 - Keep the complete original prompt in the body under the heading.
 
@@ -71,6 +72,7 @@ Before release:
 
 - inspect the first page and the last page of long PDFs;
 - inspect any page with a wide table or long multiple-choice options;
+- run `pdfinfo` and confirm the renderer is Chrome/Skia for release PDFs;
 - run `pdftotext` on at least one early page and one late page;
 - run `mat2 --show` and record whether metadata was cleaned or only audited;
 - ensure page counts and hashes in `manifest.json` match the final files.

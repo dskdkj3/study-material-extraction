@@ -5,6 +5,7 @@
   "scripts": {
     "build-preview-markdown": "node scripts/build-preview-markdown.mjs",
     "build-pdf-markdown": "node scripts/build-pdf-markdown.mjs",
+    "render-preview-pdf": "node scripts/render-preview-pdf.mjs",
     "validate-manifests": "node scripts/validate-manifests.mjs",
     "check-json": "node -e \"JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'))\""
   }

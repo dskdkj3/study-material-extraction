@@ -153,15 +153,15 @@ Use `blocked` for missing decisions or materials. Use `failed` for execution fai
    node scripts/build-preview-markdown.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
    ```
 
-15. Generate PDF previews using [Preview PDF Standard](../standards/preview-pdf.md). If using the Pandoc + `xelatex` fallback, first build PDF-specific Markdown:
+15. Generate PDF previews using [Preview PDF Standard](../standards/preview-pdf.md). The default release/review renderer is Pandoc HTML + MathJax + headless Brave/Chromium, matching the 2024-06 published style:
 
    ```sh
-   node scripts/build-pdf-markdown.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
+   nix shell nixpkgs#chromium -c node scripts/render-preview-pdf.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
    ```
 
-   Record the actual renderer in `manifest.json`, especially when the fallback was used because headless Brave/Chromium stalled.
+   Record the actual renderer in `manifest.json`. Pandoc + `xelatex` is only a temporary diagnostic fallback; do not hand off fallback PDFs as style-matching review/release artifacts unless the mismatch is explicitly accepted and recorded.
 
-16. Spot-check rendered pages visually and update `manifest.json` with preview paths, page counts, hashes, and caveats. Check the output against [Design Standard](../../DESIGN.md): page shape, heading hierarchy, option spacing, page numbers, and any wide formulas or tables.
+16. Spot-check rendered pages visually and update `manifest.json` with preview paths, page counts, hashes, and caveats. Check the output against [Design Standard](../../DESIGN.md): 2024-06-style Chrome/Skia output, page shape, heading hierarchy, option spacing, absence of LaTeX footer page numbers, and any wide formulas or tables.
 17. Re-run manifest validation.
 18. Mark the run `accepted` only after the intended content surface has been reviewed. A good preview does not imply mathematical correctness.
 

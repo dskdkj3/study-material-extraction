@@ -232,8 +232,11 @@ function pushProblemHeading(out, n, markdown, questionHeadings, level = "##") {
   const { heading, body } = problemPrompt(markdown);
   out.push(`${level} ${n}. ${customHeading || heading || "题目"}`);
   if (customHeading) {
-    out.push("");
-    out.push([heading, body].filter(Boolean).join("\n\n"));
+    const fullPrompt = dropStatusBlockquotes(markdown);
+    if (fullPrompt) {
+      out.push("");
+      out.push(fullPrompt);
+    }
   } else if (body) {
     out.push("");
     out.push(body);
@@ -298,7 +301,7 @@ function writePreviewFiles() {
 
   for (const n of problemNumbers) {
     pushGroupBreak(questionOut, n, questionGroupBreaks);
-    pushProblemHeading(questionOut, n, questions.get(n) ?? "", questionHeadings, "###");
+    pushProblemHeading(questionOut, n, questions.get(n) ?? "", questionHeadings);
     questionOut.push("");
   }
 
@@ -331,7 +334,7 @@ function writePreviewFiles() {
 
     for (const n of problemNumbers) {
       pushGroupBreak(answerOut, n, questionGroupBreaks);
-      pushProblemHeading(answerOut, n, questions.get(n) ?? "", questionHeadings, "###");
+      pushProblemHeading(answerOut, n, questions.get(n) ?? "", questionHeadings);
       answerOut.push("");
       answerOut.push(normalizeAnswerHeadings(answers.get(n) ?? "_暂无参考答案。_"));
       answerOut.push("");
@@ -358,7 +361,7 @@ function writePreviewFiles() {
 
     for (const n of problemNumbers) {
       pushGroupBreak(guidedOut, n, questionGroupBreaks);
-      pushProblemHeading(guidedOut, n, questions.get(n) ?? "", questionHeadings, "###");
+      pushProblemHeading(guidedOut, n, questions.get(n) ?? "", questionHeadings);
       guidedOut.push("");
       guidedOut.push(normalizeAnswerHeadings(guided.get(n) ?? "_暂无详解。_"));
       guidedOut.push("");

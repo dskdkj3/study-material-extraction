@@ -88,8 +88,8 @@ node scripts/validate-manifests.mjs /srv/xsy-agent-share/pdf-extraction/batch-ma
 node scripts/build-preview-markdown.mjs /srv/xsy-agent-share/pdf-extraction/<run-slug>
 ```
 
-PDF 渲染走 Pandoc + MathJax + Brave/Chromium，具体命令见 [Preview PDF Standard](docs/standards/preview-pdf.md)。
-如果 headless Brave/Chromium 在当前 Agent 环境卡住，先运行 `node scripts/build-pdf-markdown.mjs <run-dir>`，再用 Pandoc + `xelatex` / `ctexart` 渲染。
+PDF 渲染走 Pandoc HTML + MathJax + Brave/Chromium，保持和 2024-06 已发布 PDF 一致；具体命令见 [Preview PDF Standard](docs/standards/preview-pdf.md)。
+Pandoc + `xelatex` / `ctexart` 只作为临时诊断 fallback，不作为默认审阅或发布样式。
 
 ## 公开分发
 
