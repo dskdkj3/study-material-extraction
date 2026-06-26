@@ -10,7 +10,7 @@ The visual baseline is the already published `2024-06 高等数学一（II）期
 - Primary renderer: Pandoc HTML + MathJax + headless Brave/Chromium.
 - CSS: repository `scripts/print.css`.
 - Expected PDF producer shape: Chrome/Skia, not LaTeX/xdvipdfmx.
-- Do not add visible body headers, footers, or centered page numbers. The 2024-06 PDFs have clean A4 pages without LaTeX-style footer numbers.
+- Use the CSS page header/footer in `scripts/print.css`: a short, low-contrast course header and centered `第 n / m 页` footer. Keep browser default headers/footers disabled so local paths, timestamps, and browser titles never appear.
 - The first visible title should be the reader-facing exam title from `display_title`; it must not contain `草稿`, internal slugs, or source filenames.
 
 Reference command shape:
@@ -37,6 +37,7 @@ Generated combined previews should use this hierarchy:
 - Part headings such as `一、单项选择题` are level 2.
 - Problem headings are also level 2 in combined previews. This intentionally matches the 2024-06 PDFs where every problem title uses the blue left-rule heading style.
 - Problem headings must be faithful to the original prompt. Do not use invented type labels such as `小圆域二重积分极限` when the original prompt is simply a formula blank.
+- Fill-in problem headings should use the original blank sentence or a literal fragment from the prompt. Do not replace them with topic labels such as `写出曲面投影区域`, `求 q(x)`, or `求幂级数收敛域`.
 - Keep the complete original prompt in the body under the heading.
 
 ## Multiple-Choice Layout
@@ -71,6 +72,7 @@ Generated combined previews should use this hierarchy:
 Before release:
 
 - inspect the first page and the last page of long PDFs;
+- confirm the CSS header/footer/page numbers are visible, low-contrast, and not crowding the body;
 - inspect any page with a wide table or long multiple-choice options;
 - run `pdfinfo` and confirm the renderer is Chrome/Skia for release PDFs;
 - run `pdftotext` on at least one early page and one late page;

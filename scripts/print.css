@@ -1,6 +1,24 @@
 @page {
   size: A4;
-  margin: 17mm 18mm 18mm;
+  margin: 22mm 18mm 22mm;
+
+  @top-center {
+    content: "高等数学一（II） · 期末真题";
+    font-family: "Noto Sans CJK SC", "Noto Sans CJK", "Source Han Sans SC", sans-serif;
+    font-size: 7.4pt;
+    color: #667085;
+    border-bottom: 0.4pt solid #e5e7eb;
+    padding-bottom: 2mm;
+  }
+
+  @bottom-center {
+    content: "第 " counter(page) " / " counter(pages) " 页";
+    font-family: "Noto Sans CJK SC", "Noto Sans CJK", "Source Han Sans SC", sans-serif;
+    font-size: 7.4pt;
+    color: #667085;
+    border-top: 0.4pt solid #e5e7eb;
+    padding-top: 2mm;
+  }
 }
 
 * {

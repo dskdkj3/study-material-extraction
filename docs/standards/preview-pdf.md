@@ -40,6 +40,8 @@ Avoid meaningless headings such as `1. 题目` or `1. 题目与答案` in render
 
 If a problem has multiple subquestions, use a concise problem summary in the heading when helpful, then render the complete subquestions as body text below it. Do not flatten `（1）...` and `（2）...` into one long heading.
 
+For fill-in problems, headings must come from the original prompt: use the blank sentence or a literal prompt fragment. Do not invent topic labels such as `写出曲面投影区域`, `求 q(x)`, or `求幂级数收敛域`.
+
 The source `questions.md` may use a meaningful second-level heading such as `## 11. 参数反常积分：一致收敛与积分计算` for this purpose. Plain headings such as `## 11. 题目` are ignored by the preview builder.
 
 If there is only one answer method, omit `解法 A` and use a descriptive method heading:
@@ -67,7 +69,8 @@ Default goals:
 - Chinese serif body font and sans-serif headings.
 - MathJax or equivalent high-quality math rendering.
 - Display formulas for long formulas.
-- No browser headers, footers, local file paths, or timestamps.
+- No browser default headers, footers, local file paths, or timestamps.
+- Use the CSS header/footer from `scripts/print.css`: short low-contrast course header, centered `第 n / m 页` footer, no dates or filesystem paths.
 - Subtle semantic color only: use color to separate problem prompts, notes, and table headers; do not make the page feel like a slide deck.
 - Avoid repeated labels such as `答案` under every problem when the surrounding preview already establishes that it is a solution document.
 
@@ -111,6 +114,8 @@ The script renders every existing `*-preview.md` file under `preview/`, writes m
 --virtual-time-budget=60000
 --no-pdf-header-footer
 ```
+
+`--no-pdf-header-footer` disables Chromium's default print furniture only. The release style still expects the CSS `@page` header/footer/page numbers defined in `scripts/print.css`.
 
 Headless Brave/Chromium may print DBus or authorization warnings on stderr in the Agent environment; if the PDF is written and visual checks pass, treat those warnings as renderer noise and record them as a caveat rather than a failure.
 
@@ -157,6 +162,7 @@ For every generated PDF:
 - for long answer/guided PDFs, visually inspect the last page and confirm it contains the expected final problem, not an early problem with later content only present in the text layer;
 - check that math is rendered, not printed as raw LaTeX;
 - check that visible titles use the reader-facing exam title, not an internal run slug, old filename shorthand, or a title containing `草稿`;
+- check that CSS header/footer/page numbers are visible and subtle, and that no browser-default path/date/header leaked in;
 - check that `pdfinfo` shows a Chrome/Skia renderer for release/review PDFs;
 - check that multi-part questions keep their line breaks, or use a concise summary heading with the original subquestions below it;
 - run a metadata audit before public release, for example `mat2 --show *.pdf`;

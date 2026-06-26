@@ -161,7 +161,7 @@ Use `blocked` for missing decisions or materials. Use `failed` for execution fai
 
    Record the actual renderer in `manifest.json`. Pandoc + `xelatex` is only a temporary diagnostic fallback; do not hand off fallback PDFs as style-matching review/release artifacts unless the mismatch is explicitly accepted and recorded.
 
-16. Spot-check rendered pages visually and update `manifest.json` with preview paths, page counts, hashes, and caveats. Check the output against [Design Standard](../../DESIGN.md): 2024-06-style Chrome/Skia output, page shape, heading hierarchy, option spacing, absence of LaTeX footer page numbers, and any wide formulas or tables.
+16. Spot-check rendered pages visually and update `manifest.json` with preview paths, page counts, hashes, and caveats. Check the output against [Design Standard](../../DESIGN.md): Chrome/Skia output, page shape, heading hierarchy, option spacing, CSS header/footer/page numbers, absence of browser default path/date headers, and any wide formulas or tables. For fill-in problems, confirm headings are copied from the original blank sentence or a literal prompt fragment, not invented topic labels.
 17. Re-run manifest validation.
 18. Mark the run `accepted` only after the intended content surface has been reviewed. A good preview does not imply mathematical correctness.
 
