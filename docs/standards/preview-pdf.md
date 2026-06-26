@@ -36,13 +36,13 @@ Combined answer or guided-solution preview:
 ### 解法 A：球对称性
 ```
 
-Avoid meaningless headings such as `1. 题目` or `1. 题目与答案` in rendered previews. The problem heading should carry the problem itself, or a concise problem summary when the full prompt is too long.
+Avoid meaningless headings such as `1. 题目` or `1. 题目与答案` in rendered previews. Also avoid compressed topic summaries such as `1. 累次积分可以写成` when the actual prompt contains a formula, conditions, or a blank. The rendered problem heading should carry the problem itself.
 
-If a problem has multiple subquestions, use a concise problem summary in the heading when helpful, then render the complete subquestions as body text below it. Do not flatten `（1）...` and `（2）...` into one long heading.
+For multiple-choice problems, put the stem itself in the heading and keep only the options below it. Do not render a short stem summary and then repeat the real stem underneath.
 
-For fill-in problems, headings must come from the original prompt: use the blank sentence or a literal prompt fragment. Do not invent topic labels such as `写出曲面投影区域`, `求 q(x)`, or `求幂级数收敛域`.
+For fill-in problems, headings must come from the original prompt: use the blank sentence or the full prompt when conditions are needed. Do not invent topic labels such as `写出曲面投影区域`, `求 q(x)`, or `求幂级数收敛域`.
 
-The source `questions.md` may use a meaningful second-level heading such as `## 11. 参数反常积分：一致收敛与积分计算` for this purpose. Plain headings such as `## 11. 题目` are ignored by the preview builder.
+The source `questions.md` second-level headings are primarily editing delimiters. The preview builder derives rendered headings from the prompt body and falls back to the source heading only when the prompt body is empty.
 
 If there is only one answer method, omit `解法 A` and use a descriptive method heading:
 
@@ -163,6 +163,7 @@ For every generated PDF:
 - check that math is rendered, not printed as raw LaTeX;
 - check that visible titles use the reader-facing exam title, not an internal run slug, old filename shorthand, or a title containing `草稿`;
 - check that CSS header/footer/page numbers are visible and subtle, and that no browser-default path/date/header leaked in;
+- check that question-only PDFs render each problem as `n. <actual prompt>`, not `n. <topic summary>` followed by the prompt repeated as body text;
 - check that `pdfinfo` shows a Chrome/Skia renderer for release/review PDFs;
 - check that multi-part questions keep their line breaks, or use a concise summary heading with the original subquestions below it;
 - run a metadata audit before public release, for example `mat2 --show *.pdf`;

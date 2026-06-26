@@ -36,9 +36,9 @@ Generated combined previews should use this hierarchy:
 
 - Part headings such as `一、单项选择题` are level 2.
 - Problem headings are also level 2 in combined previews. This intentionally matches the 2024-06 PDFs where every problem title uses the blue left-rule heading style.
-- Problem headings must be faithful to the original prompt. Do not use invented type labels such as `小圆域二重积分极限` when the original prompt is simply a formula blank.
-- Fill-in problem headings should use the original blank sentence or a literal fragment from the prompt. Do not replace them with topic labels such as `写出曲面投影区域`, `求 q(x)`, or `求幂级数收敛域`.
-- Keep the complete original prompt in the body under the heading.
+- Problem headings in generated previews are derived from the prompt body, not from the source Markdown section title. Source headings such as `## 1. 题目` or `## 1. 累次积分可以写成` are only editing delimiters unless the prompt body is empty.
+- Problem headings must be the actual prompt, not an invented type label or compressed topic summary. Do not use headings such as `累次积分可以写成`, `写出曲面投影区域`, `求 q(x)`, or `求幂级数收敛域` when the prompt contains formulas, conditions, blanks, or choices.
+- For multiple-choice problems, put the stem itself in the heading and keep only the options below it.
 
 ## Multiple-Choice Layout
 
@@ -74,6 +74,7 @@ Before release:
 - inspect the first page and the last page of long PDFs;
 - confirm the CSS header/footer/page numbers are visible, low-contrast, and not crowding the body;
 - inspect any page with a wide table or long multiple-choice options;
+- confirm the question-only PDF does not show a compressed topic title followed by the real prompt repeated underneath;
 - run `pdfinfo` and confirm the renderer is Chrome/Skia for release PDFs;
 - run `pdftotext` on at least one early page and one late page;
 - run `mat2 --show` and record whether metadata was cleaned or only audited;

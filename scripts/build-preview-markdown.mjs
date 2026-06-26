@@ -139,17 +139,36 @@ function normalizeInlineProblemText(markdown) {
     .replace(/[。；;，,]\s*$/u, "");
 }
 
+function normalizeProblemBody(lines) {
+  const chunks = [];
+  let current = [];
+
+  function flush() {
+    const normalized = normalizeInlineProblemText(current.join("\n"));
+    if (normalized) chunks.push(normalized);
+    current = [];
+  }
+
+  for (const line of lines) {
+    if (/^[A-H]\.\s/u.test(line) && current.length > 0) flush();
+    current.push(line);
+  }
+  flush();
+
+  return chunks.join("\n\n");
+}
+
 function problemPrompt(markdown) {
   const lines = dropStatusBlockquotes(markdown)
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean);
-  let firstLine = lines.shift() ?? "";
-  if (/^求[：:]?$/u.test(firstLine) && lines.length > 0) {
-    firstLine = `${firstLine} ${lines.shift()}`;
-  }
-  const heading = normalizeInlineProblemText(firstLine);
-  const body = lines.map((line) => normalizeInlineProblemText(line)).filter(Boolean).join("\n\n");
+  const choiceIndex = lines.findIndex((line) => /^[A-H]\.\s/u.test(line));
+  const splitIndex = choiceIndex === -1 ? lines.length : choiceIndex;
+  const headingLines = lines.slice(0, splitIndex);
+  const bodyLines = lines.slice(splitIndex);
+  const heading = normalizeInlineProblemText(headingLines.join("\n"));
+  const body = normalizeProblemBody(bodyLines);
   return { heading, body };
 }
 
@@ -230,14 +249,8 @@ function displayTitle(frontmatter) {
 function pushProblemHeading(out, n, markdown, questionHeadings, level = "##") {
   const customHeading = questionHeadings.get(n);
   const { heading, body } = problemPrompt(markdown);
-  out.push(`${level} ${n}. ${customHeading || heading || "题目"}`);
-  if (customHeading) {
-    const fullPrompt = dropStatusBlockquotes(markdown);
-    if (fullPrompt) {
-      out.push("");
-      out.push(fullPrompt);
-    }
-  } else if (body) {
+  out.push(`${level} ${n}. ${heading || customHeading || "题目"}`);
+  if (body) {
     out.push("");
     out.push(body);
   }
