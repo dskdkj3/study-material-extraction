@@ -54,12 +54,46 @@ function sectionsByProblem(markdown) {
       flush();
       current = Number(match[1]);
       buffer = [];
+    } else if (line.match(/^##\s+/)) {
+      flush();
+      current = null;
+      buffer = [];
     } else if (current !== null) {
       buffer.push(line);
     }
   }
   flush();
   return sections;
+}
+
+function groupBreaksByProblem(markdown) {
+  const { body } = stripFrontmatter(markdown);
+  const groups = new Map();
+  const lines = body.split(/\r?\n/);
+  let pending = [];
+  let collecting = false;
+
+  for (const line of lines) {
+    const problem = line.match(/^##\s+(\d+)\.\s+/);
+    if (problem) {
+      if (pending.length > 0) {
+        groups.set(Number(problem[1]), pending.join("\n").trim());
+        pending = [];
+      }
+      collecting = false;
+      continue;
+    }
+
+    if (line.match(/^##\s+/)) {
+      pending = [line];
+      collecting = true;
+      continue;
+    }
+
+    if (collecting) pending.push(line);
+  }
+
+  return groups;
 }
 
 function headingsByProblem(markdown) {
@@ -216,6 +250,13 @@ function pushProblemIndex(out, problemNumbers, questions, questionHeadings) {
   }
 }
 
+function pushGroupBreak(out, n, groupBreaks) {
+  const group = groupBreaks.get(n);
+  if (!group) return;
+  out.push(dropStatusBlockquotes(group));
+  out.push("");
+}
+
 function writePreviewFiles() {
   const questionsMd = readText("questions.md");
   const answersPath = path.join(runDir, "answers.md");
@@ -234,6 +275,7 @@ function writePreviewFiles() {
 
   const questions = sectionsByProblem(questionsMd);
   const questionHeadings = headingsByProblem(questionsMd);
+  const questionGroupBreaks = groupBreaksByProblem(questionsMd);
   const answers = answersMd ? sectionsByProblem(answersMd) : new Map();
   const guided = guidedMd ? sectionsByProblem(guidedMd) : new Map();
   const problemNumbers = [...questions.keys()].sort((a, b) => a - b);
@@ -255,7 +297,8 @@ function writePreviewFiles() {
   ];
 
   for (const n of problemNumbers) {
-    pushProblemHeading(questionOut, n, questions.get(n) ?? "", questionHeadings);
+    pushGroupBreak(questionOut, n, questionGroupBreaks);
+    pushProblemHeading(questionOut, n, questions.get(n) ?? "", questionHeadings, "###");
     questionOut.push("");
   }
 
@@ -287,7 +330,8 @@ function writePreviewFiles() {
     ];
 
     for (const n of problemNumbers) {
-      pushProblemHeading(answerOut, n, questions.get(n) ?? "", questionHeadings);
+      pushGroupBreak(answerOut, n, questionGroupBreaks);
+      pushProblemHeading(answerOut, n, questions.get(n) ?? "", questionHeadings, "###");
       answerOut.push("");
       answerOut.push(normalizeAnswerHeadings(answers.get(n) ?? "_暂无参考答案。_"));
       answerOut.push("");
@@ -313,7 +357,8 @@ function writePreviewFiles() {
     ];
 
     for (const n of problemNumbers) {
-      pushProblemHeading(guidedOut, n, questions.get(n) ?? "", questionHeadings);
+      pushGroupBreak(guidedOut, n, questionGroupBreaks);
+      pushProblemHeading(guidedOut, n, questions.get(n) ?? "", questionHeadings, "###");
       guidedOut.push("");
       guidedOut.push(normalizeAnswerHeadings(guided.get(n) ?? "_暂无详解。_"));
       guidedOut.push("");

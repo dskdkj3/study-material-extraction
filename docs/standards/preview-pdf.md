@@ -148,13 +148,16 @@ pandoc preview/pdf-md/answers-preview.md \
   --from markdown+tex_math_dollars+tex_math_single_backslash \
   --pdf-engine=xelatex \
   -V documentclass=ctexart \
-  -V geometry:margin=18mm \
+  -V classoption=11pt \
+  -V papersize=a4 \
+  -V geometry:margin=20mm \
+  -V pagestyle=plain \
   -V colorlinks=false \
   --metadata title= \
   -o preview/answers-preview.pdf
 ```
 
-Use the same command shape for the other preview files. Record the renderer as `pandoc + xelatex/ctexart` in `manifest.json`.
+Use the same command shape for the other preview files. The A4/11pt/plain-page-number style follows the repository [Design Standard](../../DESIGN.md). Record the renderer as `pandoc + xelatex/ctexart` in `manifest.json`.
 
 The normalization step is needed because preview Markdown may contain display math or option labels in a shape that browser Markdown tolerates but Pandoc LaTeX parses differently. It removes blank lines inside `$$ ... $$` blocks and renders bare `A.` / `B.` / `C.` / `D.` option labels as ordinary text, not ordered-list markers.
 

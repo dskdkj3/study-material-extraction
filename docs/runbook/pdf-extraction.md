@@ -161,7 +161,7 @@ Use `blocked` for missing decisions or materials. Use `failed` for execution fai
 
    Record the actual renderer in `manifest.json`, especially when the fallback was used because headless Brave/Chromium stalled.
 
-16. Spot-check rendered pages visually and update `manifest.json` with preview paths, page counts, hashes, and caveats.
+16. Spot-check rendered pages visually and update `manifest.json` with preview paths, page counts, hashes, and caveats. Check the output against [Design Standard](../../DESIGN.md): page shape, heading hierarchy, option spacing, page numbers, and any wide formulas or tables.
 17. Re-run manifest validation.
 18. Mark the run `accepted` only after the intended content surface has been reviewed. A good preview does not imply mathematical correctness.
 

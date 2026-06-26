@@ -12,6 +12,7 @@
 - 要写喂饭级详解：看 [Guided Solution Standard](docs/standards/guided-solutions.md)。
 - 要写拓展、迁移、方法比较：看 [Teaching Explanation Standard](docs/standards/teaching-explanation.md)。
 - 要生成可读 PDF：看 [Preview PDF Standard](docs/standards/preview-pdf.md)。
+- 要统一 PDF 版式、字号、页眉页脚和选择题排版：看 [Design Standard](DESIGN.md)。
 - 要把成品公开发布：看 [Distribution Repository Standard](docs/standards/distribution-repository.md)。
 
 ## 这个仓库管什么
