@@ -141,7 +141,7 @@ Use `blocked` for missing decisions or materials. Use `failed` for execution fai
     - `alternate_expanded`: the method is expanded as a selected alternate walkthrough.
     - `reference_only`: the method remains concise in `answers.md`; record why it is not expanded when useful.
 
-    Prefer expanding alternates that are short, safer, easier to master quickly, or give a transferable idea. Keep routine variants, long overkill routes, and methods with little learning gain as `reference_only`.
+    Prefer expanding alternates that are short, safer, easier to master quickly, or give a transferable idea. Keep routine variants, long overkill routes, methods with little learning gain, and alternates that introduce heavy new prerequisites as `reference_only`. Do not expand an alternate only to make the guided solution mirror every method in `answers.md`; completeness belongs in the reference answer, while the guided solution owns the learner's path.
 
 13. Generate or update `teaching.md` when there is useful transfer value: related problem families, method comparison, short prerequisite refreshers, common traps, or variants. Do not force a teaching note for every problem.
 

@@ -42,6 +42,7 @@ Use a "fed but not bloated" level of detail:
 - Do not repeat a whole prerequisite course. Link the step to the exact idea needed here.
 - Use reader-facing prose, not self-narration. Avoid lines such as "这题一眼看起来很吓人"; say what kind of object the problem gives and what the next decision is.
 - Do not make the prose mechanically follow the same headings for every problem. The pattern below is a starting shape, not a template that overrides natural explanation flow.
+- Do not expand an alternate method merely because it exists in `answers.md`. If the alternate introduces substantial new prerequisites with little payoff for the target learner, keep it in `answers.md` as `reference_only` and mention it only briefly, if at all. A guided solution should preserve the best learning path, not maximize method count.
 
 When revising after learner feedback, extract the underlying rule. For example:
 
@@ -49,6 +50,7 @@ When revising after learner feedback, extract the underlying rule. For example:
 - "列表分部积分法又没讲" means the computational method must be taught as a local mini-recipe before its result is used.
 - "高斯公式适用于闭曲面这个不显眼" means theorem eligibility should be a prominent decision point, not buried inside a paragraph.
 - "平均值是 `1/2` 看不懂" means replace a memory shortcut with a derivation or mark it as an optional shortcut after the derivation.
+- "这个备用解法没必要讲" means the alternate likely belongs in `answers.md`, not the guided solution, unless it is clearly safer, shorter, or more transferable for the target learner.
 
 For formal guided-solution sets, especially when the target reader is beginner-level, run a beginner-learner critic pass before finalizing. This may be a subagent or an isolated review context, but it must behave as a learner who knows only the explicitly stated local prerequisites. The critic should flag:
 
