@@ -33,14 +33,26 @@ Use a "fed but not bloated" level of detail:
 
 - State what is known, what is required, and the first useful transformation.
 - Name theorem and method choices in Chinese first, with common English names only as aids, such as `格林公式（Green 公式）`.
-- Explain why a method is legal when a condition matters.
+- Explain why a method is legal before using it when a condition matters. Do not write the formula first and explain the condition later. Examples: `高斯公式` must first say it applies to closed surfaces; `格林公式` must first say it converts between a region integral and a positively oriented boundary integral; Fourier coefficient formulas must first say what the coefficients are for.
+- Treat a reader question like "为什么能这么用" or "这里没学过" as evidence of a missing local prerequisite in `guided-solutions.md`, not as a one-off chat answer. Add the missing rule, condition, direction convention, or method recipe to the solution itself.
+- When introducing an error-prone shortcut or computation trick, teach the trick before using it. For example, do not merely say "列表分部积分可得"; show the table, the derivative/integral columns, the `+,-,+` sign pattern, and the endpoint substitution when the goal is to reduce mistakes.
 - Keep routine arithmetic visible when dropping it would hide a sign, constant, endpoint, orientation, or convergence judgment.
+- Avoid unexplained "known averages" or memory-only facts for first-pass guided solutions. If using a fact such as `\int_0^{2\pi}\sin^2\theta\,d\theta=\pi`, show a short derivation with `\sin^2\theta=(1-\cos2\theta)/2` unless the file has already established that fact nearby.
 - Add a short "怎么检查" note when the result is easy to get wrong.
 - Do not repeat a whole prerequisite course. Link the step to the exact idea needed here.
+- Use reader-facing prose, not self-narration. Avoid lines such as "这题一眼看起来很吓人"; say what kind of object the problem gives and what the next decision is.
+- Do not make the prose mechanically follow the same headings for every problem. The pattern below is a starting shape, not a template that overrides natural explanation flow.
+
+When revising after learner feedback, extract the underlying rule. For example:
+
+- "格林公式都没讲就开始用" means theorem purpose, orientation, and matching condition must appear before the boundary integral.
+- "列表分部积分法又没讲" means the computational method must be taught as a local mini-recipe before its result is used.
+- "高斯公式适用于闭曲面这个不显眼" means theorem eligibility should be a prominent decision point, not buried inside a paragraph.
+- "平均值是 `1/2` 看不懂" means replace a memory shortcut with a derivation or mark it as an optional shortcut after the derivation.
 
 ## Per-Problem Pattern
 
-Use this default structure, omitting sections only when they would be empty:
+Use this default structure only when it helps readability, omitting sections when they would be empty and merging them when natural prose is clearer:
 
 ```md
 ## 1. 主线详解
