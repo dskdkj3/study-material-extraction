@@ -50,6 +50,16 @@ When revising after learner feedback, extract the underlying rule. For example:
 - "高斯公式适用于闭曲面这个不显眼" means theorem eligibility should be a prominent decision point, not buried inside a paragraph.
 - "平均值是 `1/2` 看不懂" means replace a memory shortcut with a derivation or mark it as an optional shortcut after the derivation.
 
+For formal guided-solution sets, especially when the target reader is beginner-level, run a beginner-learner critic pass before finalizing. This may be a subagent or an isolated review context, but it must behave as a learner who knows only the explicitly stated local prerequisites. The critic should flag:
+
+- theorem, formula, or method use before its purpose and eligibility conditions are stated;
+- computation shortcuts used before the recipe is taught;
+- direction, endpoint, sign, boundary, or orientation conventions that are implicit;
+- memory-only facts, average-value claims, or "obvious" identities that need a local derivation;
+- prose that sounds like author self-talk rather than learner-facing explanation.
+
+The critic should not rewrite the solution. It should return actionable gaps and the missing local prerequisite. The main author then revises `guided-solutions.md` and, when the gap reveals a reusable authoring rule, updates this standard, the runbook, or a review note.
+
 ## Per-Problem Pattern
 
 Use this default structure only when it helps readability, omitting sections when they would be empty and merging them when natural prose is clearer:

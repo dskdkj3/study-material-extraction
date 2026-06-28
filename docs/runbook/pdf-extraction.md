@@ -133,6 +133,8 @@ Use `blocked` for missing decisions or materials. Use `failed` for execution fai
 
     Guided explanations should be learner-facing but not chatty. Do not use self-narration such as "this looks scary"; instead state what object the problem gives, what decision must be made, and what condition controls that decision. Do not force a fixed heading template when natural exposition is clearer, but do make theorem eligibility, orientation, endpoint, sign, and high-error computation rules visible before they are used.
 
+    For beginner-facing material, add a beginner-learner critic pass before finalizing `guided-solutions.md`. This may be a subagent or another isolated review context. It should read as a student who has not learned the topic unless the solution itself teaches the needed local rule. Ask it to report missing theorem purpose, applicability conditions, computation recipes, implicit orientation/sign/endpoint conventions, and memory-only facts that need derivation. The critic returns gaps only; the main Agent owns the final edits and any standard/runbook updates.
+
     The Agent owns this guided-solution expansion pass by default. For each method accepted into `answers.md`, record one decision in `guided-solutions.md` or `manifest.json`:
 
     - `mainline_expanded`: the method is the main walkthrough.
