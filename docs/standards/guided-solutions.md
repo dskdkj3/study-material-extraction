@@ -35,6 +35,7 @@ Use a "fed but not bloated" level of detail:
 - Name theorem and method choices in Chinese first, with common English names only as aids, such as `格林公式（Green 公式）`.
 - Explain why a method is legal before using it when a condition matters. Do not write the formula first and explain the condition later. Examples: `高斯公式` must first say it applies to closed surfaces; `格林公式` must first say it converts between a region integral and a positively oriented boundary integral; Fourier coefficient formulas must first say what the coefficients are for.
 - Treat a reader question like "为什么能这么用" or "这里没学过" as evidence of a missing local prerequisite in `guided-solutions.md`, not as a one-off chat answer. Add the missing rule, condition, direction convention, or method recipe to the solution itself.
+- Put formal terminology after its local operational meaning when the term is likely to be new. For example, do not require the reader to know `全微分` before explaining that `Pdx+Qdy` is being treated as the total change `dPhi` of some function, so the integral becomes endpoint value difference.
 - When introducing an error-prone shortcut or computation trick, teach the trick before using it. For example, do not merely say "列表分部积分可得"; show the table, the derivative/integral columns, the `+,-,+` sign pattern, and the endpoint substitution when the goal is to reduce mistakes.
 - Keep routine arithmetic visible when dropping it would hide a sign, constant, endpoint, orientation, or convergence judgment.
 - Avoid unexplained "known averages" or memory-only facts for first-pass guided solutions. If using a fact such as `\int_0^{2\pi}\sin^2\theta\,d\theta=\pi`, show a short derivation with `\sin^2\theta=(1-\cos2\theta)/2` unless the file has already established that fact nearby.
@@ -50,6 +51,7 @@ When revising after learner feedback, extract the underlying rule. For example:
 - "列表分部积分法又没讲" means the computational method must be taught as a local mini-recipe before its result is used.
 - "高斯公式适用于闭曲面这个不显眼" means theorem eligibility should be a prominent decision point, not buried inside a paragraph.
 - "平均值是 `1/2` 看不懂" means replace a memory shortcut with a derivation or mark it as an optional shortcut after the derivation.
+- "全微分不懂" means the explanation introduced a formal name before its use in the problem was clear; first explain the endpoint-difference or total-change idea, then name the term.
 - "这个备用解法没必要讲" means the alternate likely belongs in `answers.md`, not the guided solution, unless it is clearly safer, shorter, or more transferable for the target learner.
 
 For formal guided-solution sets, especially when the target reader is beginner-level, run a beginner-learner critic pass before finalizing. This may be a subagent or an isolated review context, but it must behave as a learner who knows only the explicitly stated local prerequisites. The critic should flag:
